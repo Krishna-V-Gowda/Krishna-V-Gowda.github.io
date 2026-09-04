@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="620" viewBox="0 0 1440 620" role="img" aria-labelledby="title desc">
+  <title id="title">DATA301 Machine Learning Studio</title>
+  <desc id="desc">A scientific learning canvas with model boundaries, eigenvectors, and metric curves.</desc>
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07111f"/><stop offset="1" stop-color="#12335a"/></linearGradient></defs>
+  <rect width="1440" height="620" fill="url(#g)"/>
+  <g opacity=".22" stroke="#9bb2e9" fill="none"><path d="M0 105H1440M0 205H1440M0 305H1440M0 405H1440M0 505H1440"/><path d="M120 0V620M320 0V620M520 0V620M720 0V620M920 0V620M1120 0V620M1320 0V620"/></g>
+  <g transform="translate(965 115)">
+    <circle cx="160" cy="160" r="140" fill="none" stroke="#88a9ff" stroke-width="3" opacity=".55"/>
+    <path d="M25 272C80 178 128 221 183 122S277 49 319 87" fill="none" stroke="#f3b85d" stroke-width="7"/>
+    <path d="M61 304L284 57" stroke="#8fe0c1" stroke-width="5"/>
+    <g fill="#eaf0ff"><circle cx="78" cy="245" r="7"/><circle cx="112" cy="219" r="7"/><circle cx="145" cy="191" r="7"/><circle cx="201" cy="135" r="7"/><circle cx="245" cy="96" r="7"/></g>
+  </g>
+  <text x="90" y="175" fill="#f7f9ff" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="30" letter-spacing="6">DATA301</text>
+  <text x="88" y="270" fill="#ffffff" font-family="system-ui, sans-serif" font-size="76" font-weight="760">Machine Learning Studio</text>
+  <text x="92" y="335" fill="#b8c8ee" font-family="system-ui, sans-serif" font-size="31">intuition → mathematics → implementation → experiment</text>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#8fe0c1">
+    <text x="94" y="480">12 INTERACTIVE LABS</text><text x="355" y="480">INSPECTABLE ALGORITHMS</text><text x="700" y="480">METAMORPHIC TESTS</text>
+  </g>
+</svg>

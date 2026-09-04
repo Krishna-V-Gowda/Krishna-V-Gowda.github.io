@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="t d">
+<title id="t">Proofloom</title><desc id="d">Verification-first settlement close: AI ranks ambiguity, policy protects financial truth.</desc>
+<defs><pattern id="g" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M56 0H0V56" fill="none" stroke="#d8d1c4" stroke-width="1" opacity=".35"/></pattern><linearGradient id="f" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7f2e8"/><stop offset="1" stop-color="#eee7db"/></linearGradient></defs>
+<rect width="1280" height="640" rx="28" fill="url(#f)"/><rect width="1280" height="640" rx="28" fill="url(#g)"/>
+<text x="76" y="88" font-family="ui-monospace,monospace" font-size="14" font-weight="700" letter-spacing="3" fill="#df6b47">CLOSE THE CASH. KEEP THE PROOF.</text>
+<text x="76" y="200" font-family="Georgia,serif" font-size="90" fill="#13241f">Proofloom</text>
+<text x="76" y="255" font-family="ui-sans-serif,system-ui" font-size="23" fill="#5e6963">Verification-first settlement close</text>
+<g transform="translate(76 340)"><rect width="1128" height="190" rx="22" fill="#0f3c32"/>
+<g font-family="ui-monospace,monospace" font-size="13" letter-spacing="2"><text x="40" y="45" fill="#83d2b9">EVIDENCE</text><text x="407" y="45" fill="#efad81">BOUNDARY</text><text x="800" y="45" fill="#83d2b9">DECISION</text></g>
+<text x="40" y="92" font-family="Georgia,serif" font-size="30" fill="#fffdf8">payments → settlement → bank</text>
+<path d="M340 100H390" stroke="#83d2b9" stroke-width="3"/><circle cx="390" cy="100" r="6" fill="#83d2b9"/>
+<text x="407" y="92" font-family="Georgia,serif" font-size="30" fill="#fffdf8">AI ranks. Policy decides.</text>
+<path d="M735 100H782" stroke="#efad81" stroke-width="3"/><circle cx="782" cy="100" r="6" fill="#efad81"/>
+<text x="800" y="92" font-family="Georgia,serif" font-size="30" fill="#fffdf8">prove · review · refuse</text>
+<text x="40" y="150" font-family="ui-monospace,monospace" font-size="16" fill="#bdd3cb">137 paise wrong → close blocked → invariant exposed → human authority preserved</text>
+</g></svg>

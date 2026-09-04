@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="620" viewBox="0 0 1440 620" role="img" aria-labelledby="title desc">
+  <title id="title">RiskLab</title>
+  <desc id="desc">Robust allocation under uncertainty, shown as regime bands, covariance geometry, and drawdown paths.</desc>
+  <rect width="1440" height="620" fill="#081015"/>
+  <rect x="56" y="54" width="1328" height="512" rx="18" fill="#0d1820" stroke="#27404c"/>
+  <g opacity="0.42">
+    <path d="M80 430 C210 410 260 260 390 330 S570 500 690 350 S870 190 1010 300 S1190 470 1360 260" fill="none" stroke="#88c7b6" stroke-width="3"/>
+    <path d="M80 456 C200 450 300 390 410 410 S610 290 720 380 S900 450 1030 355 S1210 315 1360 390" fill="none" stroke="#d9a45d" stroke-width="2"/>
+  </g>
+  <g fill="none" stroke="#385866" stroke-width="1">
+    <path d="M80 180H1360M80 260H1360M80 340H1360M80 420H1360"/>
+    <path d="M360 140V480M680 140V480M1000 140V480"/>
+  </g>
+  <text x="96" y="155" fill="#d9e7eb" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="70" font-weight="700" letter-spacing="5">RISKLAB</text>
+  <text x="100" y="212" fill="#8ca8b3" font-family="system-ui, sans-serif" font-size="25">ROBUST ALLOCATION UNDER ESTIMATION ERROR, REGIME SHIFT &amp; COST</text>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="17">
+    <text x="100" y="518" fill="#88c7b6">TRAILING WINDOWS</text>
+    <text x="360" y="518" fill="#88c7b6">OAS / CVaR / RISK PARITY</text>
+    <text x="748" y="518" fill="#88c7b6">BLOCK BOOTSTRAP</text>
+    <text x="1082" y="518" fill="#d9a45d">SYNTHETIC ≠ PROFIT</text>
+  </g>
+</svg>

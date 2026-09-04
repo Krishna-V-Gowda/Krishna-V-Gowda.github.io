@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="620" viewBox="0 0 1440 620" role="img" aria-labelledby="title desc">
+  <title id="title">TrustBench</title>
+  <desc id="desc">An analytical reliability instrument comparing shipped behavior, independent oracles, and invariants.</desc>
+  <rect width="1440" height="620" fill="#071013"/>
+  <rect x="54" y="48" width="1332" height="524" rx="18" fill="#0b171b" stroke="#29444c"/>
+  <g stroke="#29444c" opacity=".55"><path d="M84 160H1356M84 260H1356M84 360H1356M84 460H1356"/><path d="M250 86V534M500 86V534M750 86V534M1000 86V534M1250 86V534"/></g>
+  <g transform="translate(925 124)">
+    <circle cx="170" cy="170" r="150" fill="none" stroke="#4c747d" stroke-width="2"/>
+    <circle cx="170" cy="170" r="103" fill="none" stroke="#4c747d" stroke-width="2"/>
+    <circle cx="170" cy="170" r="56" fill="none" stroke="#4c747d" stroke-width="2"/>
+    <path d="M32 208L116 170L166 183L236 96L311 135" fill="none" stroke="#91d4c2" stroke-width="6"/>
+    <path d="M32 246L100 222L168 227L236 207L311 214" fill="none" stroke="#e5ac63" stroke-width="4"/>
+    <circle cx="236" cy="96" r="10" fill="#91d4c2"/><circle cx="236" cy="207" r="8" fill="#e5ac63"/>
+  </g>
+  <text x="96" y="182" fill="#dbe8ea" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="76" font-weight="700" letter-spacing="5">TRUSTBENCH</text>
+  <text x="100" y="246" fill="#8faab1" font-family="system-ui, sans-serif" font-size="28">DOES THE SHIPPED ANALYTICAL SYSTEM TELL THE TRUTH?</text>
+  <text x="100" y="342" fill="#dbe8ea" font-family="system-ui, sans-serif" font-size="23">exact source</text>
+  <text x="100" y="382" fill="#91d4c2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">→ FINGERPRINT → ISOLATE → ORACLE → INVARIANT → EVIDENCE</text>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18">
+    <text x="100" y="498" fill="#91d4c2">15 / 16 PASS AFTER REPAIR</text>
+    <text x="470" y="498" fill="#91d4c2">0 FAILED INVARIANTS</text>
+    <text x="790" y="498" fill="#e5ac63">1 DOCUMENTED LIMITATION</text>
+  </g>
+</svg>

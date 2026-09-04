@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="t d">
+<title id="t">Krishna V. Gowda — KVG Lab</title><desc id="d">Systems that make hidden assumptions inspectable across financial control, market infrastructure, analytical reliability, quantitative research, and scientific machine learning.</desc>
+<defs><linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#061017"/><stop offset="1" stop-color="#0d2732"/></linearGradient><pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#244553" opacity=".34"/></pattern><filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000" flood-opacity=".35"/></filter></defs>
+<rect width="1280" height="640" fill="url(#bg)"/><rect width="1280" height="640" fill="url(#grid)"/>
+<g transform="translate(82 76)">
+<text x="0" y="0" dominant-baseline="hanging" fill="#9bb2bd" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" letter-spacing="4">KVG / INDEPENDENT RESEARCH + ENGINEERING</text>
+<text x="0" y="86" dominant-baseline="hanging" fill="#f5f8f9" font-family="system-ui,-apple-system,sans-serif" font-size="69" font-weight="760" letter-spacing="-2">KRISHNA V. GOWDA</text>
+<text x="0" y="186" dominant-baseline="hanging" fill="#d8e4e8" font-family="Georgia,serif" font-size="45">Systems that make hidden</text>
+<text x="0" y="238" dominant-baseline="hanging" fill="#ef8b63" font-family="Georgia,serif" font-size="45">assumptions inspectable.</text>
+<text x="0" y="326" dominant-baseline="hanging" fill="#91a8b2" font-family="system-ui,-apple-system,sans-serif" font-size="22">Financial proof · event state · analytical truth · uncertainty · executable mathematics</text>
+<path d="M0 396H1116" stroke="#2a4a57"/>
+<g transform="translate(0 438)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" letter-spacing="1.6">
+<circle cx="8" cy="8" r="8" fill="#ef8b63"/><text x="30" y="14" fill="#e7b39e">PROOFLOOM</text>
+<circle cx="223" cy="8" r="8" fill="#4fd2c5"/><text x="245" y="14" fill="#a0ddd7">MARKETREPLAY</text>
+<circle cx="477" cy="8" r="8" fill="#67aef9"/><text x="499" y="14" fill="#accdf0">TRUSTBENCH</text>
+<circle cx="708" cy="8" r="8" fill="#e8bd62"/><text x="730" y="14" fill="#e5cf9e">RISKLAB</text>
+<circle cx="890" cy="8" r="8" fill="#b793f2"/><text x="912" y="14" fill="#d0bdea">DATA301</text>
+</g>
+<text x="0" y="526" dominant-baseline="hanging" fill="#76909c" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14">DEFINE SEMANTICS → BUILD A REFERENCE → BREAK THE SYSTEM → MEASURE → BOUND THE CLAIM</text>
+</g>
+</svg>
