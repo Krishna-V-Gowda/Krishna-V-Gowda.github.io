@@ -9,7 +9,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 TEXT_SUFFIXES = {".html", ".css", ".md", ".xml", ".txt", ".json", ".svg"}
-FORBIDDEN_DIRS = {".git", "node_modules", ".next", "build", "dist", "__pycache__"}
+FORBIDDEN_DIRS = {"node_modules", ".next", "build", "dist", "__pycache__"}
 FORBIDDEN_PATTERNS = {
     "local-user-path": re.compile("/" + "Users" + "/"),
     "container-path": re.compile("/" + "mnt" + "/" + "data" + "/"),
