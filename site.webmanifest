@@ -1,0 +1,21 @@
+{
+  "name": "KVG / LAB \u2014 Systems Atlas",
+  "short_name": "KVG / LAB",
+  "description": "Systems that make hidden assumptions inspectable.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#061017",
+  "theme_color": "#061017",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
