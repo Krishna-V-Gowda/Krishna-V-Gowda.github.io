@@ -27,6 +27,8 @@ class PageParser(HTMLParser):
         self.h1_count = 0
         self.title_count = 0
         self.lang: str | None = None
+        self.head_links: list[tuple[str, str]] = []
+        self.meta: dict[str, str] = {}
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         values = dict(attrs)
@@ -42,6 +44,12 @@ class PageParser(HTMLParser):
             self.links.append(values["href"] or "")
         if tag == "img":
             self.images.append((values.get("src") or "", values.get("alt") or ""))
+        if tag == "link" and values.get("href"):
+            self.head_links.append(((values.get("rel") or "").lower(), values["href"] or ""))
+        if tag == "meta":
+            key = values.get("property") or values.get("name")
+            if key and values.get("content") is not None:
+                self.meta[key] = values["content"] or ""
 
 
 def resolve_local(page: Path, reference: str) -> Path | None:
@@ -55,6 +63,20 @@ def resolve_local(page: Path, reference: str) -> Path | None:
     return (page.parent / parts.path).resolve()
 
 
+SITE_ORIGIN = "https://krishna-v-gowda.github.io"
+
+
+def site_path(url: str) -> Path | None:
+    """Map an absolute URL on this site, or a root-relative path, to a file in the payload."""
+    parts = urlsplit(url)
+    if parts.netloc and f"{parts.scheme}://{parts.netloc}" != SITE_ORIGIN:
+        return None
+    path = parts.path or "/"
+    if path.endswith("/"):
+        path += "index.html"
+    return ROOT / path.lstrip("/")
+
+
 def main() -> int:
     errors: list[str] = []
     pages = sorted(ROOT.rglob("*.html"))
@@ -62,10 +84,15 @@ def main() -> int:
     image_count = 0
     id_count = 0
 
+    parsed: dict[Path, PageParser] = {}
     for page in pages:
-        relative = page.relative_to(ROOT)
         parser = PageParser()
         parser.feed(page.read_text(encoding="utf-8"))
+        parsed[page.resolve()] = parser
+
+    for page in pages:
+        relative = page.relative_to(ROOT)
+        parser = parsed[page.resolve()]
         if parser.lang != "en":
             errors.append(f"{relative}: html lang must be 'en'")
         if parser.title_count != 1:
@@ -89,6 +116,28 @@ def main() -> int:
             target = resolve_local(page, href)
             if target is not None and not target.exists():
                 errors.append(f"{relative}: broken local link {href}")
+                continue
+            fragment = urlsplit(href).fragment
+            if target is not None and fragment and target.suffix == ".html":
+                other = parsed.get(target.resolve())
+                if other is not None and fragment not in other.ids:
+                    errors.append(f"{relative}: link {href} points to a missing section")
+        for rel, href in parser.head_links:
+            link_count += 1
+            target = site_path(href) if href.startswith(("/", "http")) else resolve_local(page, href)
+            if target is not None and not target.exists():
+                errors.append(f"{relative}: <link rel={rel}> target missing: {href}")
+        if relative.name != "404.html":
+            for key in ("description", "og:title", "og:description", "og:url", "og:image", "twitter:card"):
+                if not parser.meta.get(key):
+                    errors.append(f"{relative}: missing <meta> {key}")
+            image = parser.meta.get("og:image", "")
+            if image:
+                if not image.lower().endswith((".png", ".jpg", ".jpeg")):
+                    errors.append(f"{relative}: og:image must be PNG or JPEG for social platforms: {image}")
+                target = site_path(image)
+                if target is not None and not target.exists():
+                    errors.append(f"{relative}: og:image file missing: {image}")
 
     for path in sorted(ROOT.rglob("*")):
         relative = path.relative_to(ROOT)
@@ -99,6 +148,16 @@ def main() -> int:
                 ET.parse(path)
             except ET.ParseError as exc:
                 errors.append(f"{relative}: invalid SVG/XML: {exc}")
+
+    sitemap = ROOT / "sitemap.xml"
+    if sitemap.exists():
+        namespace = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        listed = {site_path(node.text or "").resolve() for node in ET.parse(sitemap).findall("s:url/s:loc", namespace)}
+        expected = {page.resolve() for page in pages if page.name != "404.html"}
+        for page in sorted(expected - listed):
+            errors.append(f"sitemap.xml: page not listed: {page.relative_to(ROOT)}")
+        for page in sorted(listed - expected):
+            errors.append(f"sitemap.xml: lists a missing page: {page}")
 
     public_text_parts: list[str] = []
     for path in sorted(ROOT.rglob("*")):
