@@ -6,11 +6,11 @@
 <text x="76" y="200" font-family="Georgia,serif" font-size="90" fill="#13241f">Proofloom</text>
 <text x="76" y="255" font-family="ui-sans-serif,system-ui" font-size="23" fill="#5e6963">Verification-first settlement close</text>
 <g transform="translate(76 340)"><rect width="1128" height="190" rx="22" fill="#0f3c32"/>
-<g font-family="ui-monospace,monospace" font-size="13" letter-spacing="2"><text x="40" y="45" fill="#83d2b9">EVIDENCE</text><text x="407" y="45" fill="#efad81">BOUNDARY</text><text x="800" y="45" fill="#83d2b9">DECISION</text></g>
-<text x="40" y="92" font-family="Georgia,serif" font-size="30" fill="#fffdf8">payments → settlement → bank</text>
-<path d="M340 100H390" stroke="#83d2b9" stroke-width="3"/><circle cx="390" cy="100" r="6" fill="#83d2b9"/>
-<text x="407" y="92" font-family="Georgia,serif" font-size="30" fill="#fffdf8">AI ranks. Policy decides.</text>
-<path d="M735 100H782" stroke="#efad81" stroke-width="3"/><circle cx="782" cy="100" r="6" fill="#efad81"/>
-<text x="800" y="92" font-family="Georgia,serif" font-size="30" fill="#fffdf8">prove · review · refuse</text>
+<g font-family="ui-monospace,monospace" font-size="13" letter-spacing="2"><text x="40" y="45" fill="#83d2b9">EVIDENCE</text><text x="465" y="45" fill="#efad81">BOUNDARY</text><text x="816" y="45" fill="#83d2b9">DECISION</text></g>
+<text x="40" y="92" font-family="Georgia,serif" font-size="26" fill="#fffdf8">payments → settlement → bank</text>
+<path d="M395 83H439" stroke="#83d2b9" stroke-width="3"/><circle cx="445" cy="83" r="6" fill="#83d2b9"/>
+<text x="465" y="92" font-family="Georgia,serif" font-size="26" fill="#fffdf8">AI ranks. Policy decides.</text>
+<path d="M746 83H790" stroke="#efad81" stroke-width="3"/><circle cx="796" cy="83" r="6" fill="#efad81"/>
+<text x="816" y="92" font-family="Georgia,serif" font-size="26" fill="#fffdf8">prove · review · refuse</text>
 <text x="40" y="150" font-family="ui-monospace,monospace" font-size="16" fill="#bdd3cb">137 paise wrong → close blocked → invariant exposed → human authority preserved</text>
 </g></svg>
