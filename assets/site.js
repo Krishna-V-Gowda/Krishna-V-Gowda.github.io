@@ -9,54 +9,21 @@ const token = (el) => (el._run = (el._run || 0) + 1);
 const color = (name, el = document.documentElement) => getComputedStyle(el).getPropertyValue(name).trim();
 const inr = (paise) => (paise < 0 ? "−₹" : "₹") + (Math.abs(paise) / 100).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-/* ---------- Feel: vibration where the device has it (Android), and optional sound ---------- */
+/* ---------- Feel: a short vibration at meaningful moments, where the device has it (Android) ---------- */
 
 /** A short vibration at meaningful moments. iOS ignores it; reduced motion turns it off. */
 const buzz = (pattern) => { if (!reduceMotion && navigator.vibrate && navigator.userActivation?.hasBeenActive !== false) try { navigator.vibrate(pattern); } catch {} };
-let soundOn = false;
-try { soundOn = localStorage.getItem("kvg-sound") === "on"; } catch {}
-let audio = null;
-/** A tiny synthesized click or tone; silent unless the visitor turned sound on. */
-function tone(freq, ms = 40, type = "sine", gain = 0.06, when = 0) {
-  if (!soundOn) return;
-  try {
-    audio ||= new (window.AudioContext || window.webkitAudioContext)();
-    const t = audio.currentTime + when;
-    const o = audio.createOscillator();
-    const g = audio.createGain();
-    o.type = type;
-    o.frequency.setValueAtTime(freq, t);
-    g.gain.setValueAtTime(gain, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + ms / 1000);
-    o.connect(g).connect(audio.destination);
-    o.start(t);
-    o.stop(t + ms / 1000 + 0.02);
-  } catch {}
-}
 const feel = {
-  tap: () => { buzz(8); tone(520, 50, "triangle"); },
-  tick: () => { buzz(3); tone(1400, 18, "square", 0.02); },
-  good: () => { buzz([12, 40, 12]); tone(660, 90); tone(990, 140, "sine", 0.06, 0.08); },
-  bad: () => { buzz([30, 50, 90]); tone(180, 220, "sawtooth", 0.05); },
-  alarm: () => { buzz([40, 60, 40, 60, 90]); tone(150, 160, "sawtooth", 0.05); tone(150, 220, "sawtooth", 0.05, 0.22); },
+  tap: () => buzz(8),
+  tick: () => buzz(3),
+  good: () => buzz([12, 40, 12]),
+  bad: () => buzz([30, 50, 90]),
+  alarm: () => buzz([40, 60, 40, 60, 90]),
 };
 /** Slider ticks, at most one every 45 ms so a fast drag is a purr, not a buzz. */
 let lastTick = 0;
 const tickThrottled = () => { const now = performance.now(); if (now - lastTick > 45) { lastTick = now; feel.tick(); } };
 window.feel = feel; // the 3D scenes share the same feel
-
-function initSound() {
-  const btn = $("#sound");
-  if (!btn) return;
-  const show = () => { btn.setAttribute("aria-pressed", String(soundOn)); btn.textContent = soundOn ? "Sound on" : "Sound off"; };
-  show();
-  btn.addEventListener("click", () => {
-    soundOn = !soundOn;
-    try { localStorage.setItem("kvg-sound", soundOn ? "on" : "off"); } catch {}
-    show();
-    feel.tap();
-  });
-}
 
 /** Tell the 3D scenes what a demo just did; the latest state is kept in case a scene loads afterwards. */
 const tell = (name, detail) => {
@@ -273,7 +240,6 @@ async function initRecord() {
       tiles[i].classList.add(v === "Verified" ? "ok" : "bad");
       $(".t-mark", tiles[i]).textContent = v === "Verified" ? "✓" : "✕";
       if (v !== "Verified") { $(".t-when", tiles[i]).textContent = v; bad++; }
-      else { tone(700 + i * 40, 30, "triangle", 0.03); }
       prev = e.hash;
       report("checking");
       await sleep(fast ? 35 : 70);
@@ -353,7 +319,6 @@ async function initProofloom() {
       if (run !== el._run) return;
       sum += p;
       k("gross").textContent = inr(sum);
-      if (!reduceMotion) tone(400 + (sum / gross) * 500, 20, "triangle", 0.02);
       await sleep(50);
     }
     for (const [n, v] of [["refunds", d.refunds], ["fees", d.fees], ["tax", d.tax]]) {
@@ -912,10 +877,18 @@ function initDayflow() {
   render();
 }
 
+/** The KRIVANCE wordmark settles from wide tracking into place once, as it comes into view. */
+function initWordmark() {
+  const mark = $(".krivance .wordmark");
+  if (!mark || reduceMotion) return;
+  mark.classList.add("pending");
+  const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { io.disconnect(); requestAnimationFrame(() => mark.classList.remove("pending")); } }, { threshold: 0.6 });
+  io.observe(mark);
+}
+
 /* ---------- Start ---------- */
 
 document.addEventListener("DOMContentLoaded", () => {
-  initSound();
   initMagnets();
   initRecord();
   initProofloom();
@@ -925,5 +898,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initRisk();
   initGradient();
   initDayflow();
+  initWordmark();
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => location.reload());
 });

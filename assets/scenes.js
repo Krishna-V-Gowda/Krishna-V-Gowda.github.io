@@ -311,22 +311,22 @@ async function terrainScene(THREE) {
   const geometry = new THREE.PlaneGeometry(6, 5.2, COLS - 1, ROWS - 1);
   const pos = geometry.attributes.position;
   const colors = new Float32Array(pos.count * 3);
-  const low = new THREE.Color(css("--paper"));
-  const high = new THREE.Color(css("--c-marketreplay"));
+  const low = new THREE.Color(css("--surface"));
+  const high = new THREE.Color(css("--proof"));
   const c = new THREE.Color();
   for (let r = 0; r < ROWS; r++) {
     for (let col = 0; col < COLS; col++) {
       const idx = r * COLS + col;
       const h = Math.log1p(grid[r][col]) / peak;
       pos.setZ(idx, h * 1.05);
-      c.copy(low).lerp(high, Math.min(1, 0.15 + h * 1.1));
+      c.copy(low).lerp(high, THREE.MathUtils.smoothstep(h, 0.74, 1)); // heights are log-scaled, so only the tallest levels glow
       colors.set([c.r, c.g, c.b], idx * 3);
     }
   }
   geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
   geometry.computeVertexNormals();
   const surface = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 0.75, metalness: 0.05, side: THREE.DoubleSide }));
-  const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), new THREE.LineBasicMaterial({ color: new THREE.Color(css("--ink")), transparent: true, opacity: 0.12 }));
+  const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), new THREE.LineBasicMaterial({ color: new THREE.Color(css("--proof")), transparent: true, opacity: 0.07 }));
   // A glass sheet marks the message the panel beside it has replayed up to.
   const scanMat = new THREE.MeshBasicMaterial({ color: css("--c-marketreplay"), transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
   const scan = new THREE.Mesh(new THREE.PlaneGeometry(6.1, 1.3), scanMat);
@@ -620,9 +620,9 @@ function bowlScene(THREE) {
     const pos = geo.attributes.position;
     const colors = new Float32Array(pos.count * 3);
     geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    const low = new THREE.Color(css("--c-data301")), high = new THREE.Color(css("--paper"));
+    const low = new THREE.Color(css("--proof")), high = new THREE.Color(css("--surface"));
     const c = new THREE.Color();
-    const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), new THREE.LineBasicMaterial({ color: css("--ink"), transparent: true, opacity: 0.06 }));
+    const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), new THREE.LineBasicMaterial({ color: css("--proof"), transparent: true, opacity: 0.05 }));
     function reshape() {
       let maxH = 0;
       const hs = [];
@@ -633,7 +633,7 @@ function bowlScene(THREE) {
         hs.push(h); maxH = Math.max(maxH, h);
         pos.setY(i, h);
       }
-      hs.forEach((h, i) => { c.copy(low).lerp(high, Math.min(1, h / maxH)); colors.set([c.r, c.g, c.b], i * 3); });
+      hs.forEach((h, i) => { c.copy(low).lerp(high, THREE.MathUtils.smoothstep(h / maxH, 0.02, 0.35)); colors.set([c.r, c.g, c.b], i * 3); }); // only the floor of the valley glows
       pos.needsUpdate = true;
       geo.attributes.color.needsUpdate = true;
       geo.computeVertexNormals();

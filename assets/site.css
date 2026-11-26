@@ -25,7 +25,7 @@
   --line-a: var(--proof);
   --line-b: var(--ink);
   --line-c: var(--g2);
-  --line-d: var(--g4);
+  --line-d: var(--g3);
   --acc: var(--proof);
   --display: "Geist", "Helvetica Neue", Arial, sans-serif;
   --body: "Geist", "Helvetica Neue", Arial, sans-serif;
@@ -71,12 +71,6 @@ button { font: inherit; color: inherit; }
 .top nav { display: flex; align-items: center; gap: clamp(14px, 2.4vw, 28px); flex-wrap: wrap; font-size: 0.92rem; }
 .top nav a { color: var(--muted); text-decoration: none; transition: color .2s; }
 .top nav a:hover { color: var(--ink); }
-.sound {
-  border: 1px solid var(--rule); background: transparent; border-radius: 999px; padding: 4px 12px;
-  font-size: 0.82rem; color: var(--muted); cursor: pointer; transition: transform .25s var(--spring), border-color .2s, color .2s;
-}
-.sound[aria-pressed="true"] { color: var(--proof); border-color: color-mix(in srgb, var(--proof) 50%, var(--rule)); }
-.sound:active { transform: scale(.92); }
 
 /* Hero: the Record as light, behind the words */
 .hero {
@@ -110,6 +104,17 @@ canvas.ledger3d:active { cursor: grabbing; }
 .ledger-label b { font-weight: 500; }
 .ledger-label code { color: var(--muted); font-size: 0.78rem; }
 .ledger-label.on { opacity: 1; }
+/* The one scripted entrance on the page: the hero rises out of a soft blur while the chain lights up behind it. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > *, .ticker { animation: rise 1.1s cubic-bezier(.16, 1, .3, 1) both; }
+  .hero-copy > :nth-child(2) { animation-delay: .08s; }
+  .hero-copy > :nth-child(3) { animation-delay: .2s; }
+  .hero-copy > :nth-child(4) { animation-delay: .3s; }
+  .ticker { animation-delay: .6s; }
+  canvas.ledger3d { animation: fade 1.8s ease-out both; }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(18px); filter: blur(10px); } }
+@keyframes fade { from { opacity: 0; } }
 .no-webgl .hero { min-height: 0; }
 .no-webgl .ledger-hint { display: none; }
 
@@ -184,7 +189,7 @@ canvas.ledger3d:active { cursor: grabbing; }
   display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 4vw, 64px);
   padding: clamp(40px, 5vw, 72px) 0; border-top: 1px solid var(--rule); align-items: start; scroll-margin-top: 70px;
 }
-.system-copy { display: grid; gap: 14px; max-width: 34rem; }
+.system-copy { display: grid; gap: 14px; max-width: 34rem; position: sticky; top: 84px; }
 .system h3 { font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 500; letter-spacing: -0.045em; display: flex; align-items: center; gap: 14px; }
 .system h3::before { content: ""; width: 0.42em; height: 0.42em; border-radius: 50%; background: var(--acc); flex: none; }
 .what { font-size: 1.1rem; }
@@ -281,7 +286,7 @@ svg.risk { display: block; height: auto; touch-action: pan-y; cursor: crosshair;
 .cell.nope { animation: shake .4s both; }
 @keyframes pop { from { transform: scale(.6); } }
 .cov { height: 34px; display: flex; align-items: flex-end; }
-.cov i { display: block; width: 100%; border-radius: 4px 4px 2px 2px; background: var(--c-data301); transition: height .45s var(--spring), background .3s; }
+.cov i { display: block; width: 100%; border-radius: 4px 4px 2px 2px; background: var(--g3); transition: height .45s var(--spring), background .3s; }
 .cov i.mid { background: var(--anchor); }
 .cov i.low { background: var(--refuse); }
 .cal .cov-label { align-self: end; color: var(--muted); }
@@ -310,6 +315,14 @@ svg.risk { display: block; height: auto; touch-action: pan-y; cursor: crosshair;
 /* KRIVANCE and about */
 .krivance { padding: clamp(56px, 8vw, 110px) var(--gutter); background: radial-gradient(ellipse 70% 120% at 85% 50%, var(--proof-soft), transparent 70%), var(--surface); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
 .krivance > div { max-width: 46rem; display: grid; gap: 18px; }
+/* KRIVANCE's own wordmark treatment: Funnel Display, light, widely tracked. Tracking adds space after the last letter, so a negative right margin balances it. */
+.krivance h2.wordmark {
+  font: 520 clamp(2rem, 4.6vw, 3.6rem)/1 "Funnel Display", var(--display); letter-spacing: 0.34em; margin-right: -0.34em;
+  margin-bottom: 10px; background: linear-gradient(180deg, var(--ink) 30%, color-mix(in srgb, var(--ink) 55%, var(--proof)));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  transition: letter-spacing 1.6s cubic-bezier(.16, 1, .3, 1), opacity 1.2s;
+}
+.krivance h2.wordmark.pending { letter-spacing: 0.7em; opacity: 0; }
 .krivance p { font-size: 1.12rem; color: var(--muted); }
 .about { padding: clamp(56px, 8vw, 110px) var(--gutter); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px clamp(28px, 4vw, 56px); align-items: start; }
 .about .contact { grid-column: 2; }
@@ -351,6 +364,7 @@ svg.risk { display: block; height: auto; touch-action: pan-y; cursor: crosshair;
 
 @media (max-width: 900px) {
   .about { grid-template-columns: minmax(0, 1fr); }
+  .system-copy { position: static; }
   .about .contact { grid-column: auto; }
   .ledger-hint { display: none; }
   .hero { padding-bottom: 380px; min-height: 0; }
