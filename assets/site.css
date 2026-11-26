@@ -207,8 +207,38 @@ svg.risk { display: block; height: auto; }
 .also ul { margin: 12px 0 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--muted); }
 .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 28px var(--gutter) 40px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
 
+/* Case-study pages */
+.case { padding: 0 var(--gutter); }
+.case-hero { display: grid; gap: 18px; max-width: 52rem; padding: clamp(24px, 5vw, 64px) 0 clamp(32px, 5vw, 56px); }
+.back { font-weight: 700; text-decoration: none; color: var(--muted); }
+.back::before { content: "‹ "; }
+.back:hover { color: var(--ink); }
+.case-hero h1 { font-size: clamp(3rem, 9vw, 7.5rem); font-weight: 900; letter-spacing: -0.05em; line-height: 0.92; }
+.case-tag { font-size: clamp(1.3rem, 2.4vw, 1.9rem); font-weight: 700; letter-spacing: -0.015em; }
+.case-what { font-size: 1.12rem; color: var(--muted); max-width: 40rem; }
+.case-demo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; max-width: 64rem; }
+.case-demo .terrain { margin: 0; }
+.case-body { display: grid; gap: clamp(36px, 5vw, 56px); max-width: 46rem; padding: clamp(48px, 7vw, 88px) 0; }
+.case-body h2 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 14px; }
+.case-body p { font-size: 1.08rem; }
+.case-body .links { margin-top: 16px; }
+.evidence { margin: 0; display: grid; border-top: 1px solid var(--rule); }
+.evidence div { display: grid; grid-template-columns: minmax(8rem, 0.32fr) minmax(0, 1fr); gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.evidence dt { font-weight: 700; }
+.evidence dd { margin: 0; color: var(--muted); }
+.boundary { border-left: 3px solid var(--refuse); padding-left: 16px; color: var(--muted); }
+.case-next {
+  display: grid; gap: 4px; margin: 0 0 clamp(48px, 7vw, 88px); padding: clamp(24px, 4vw, 40px); max-width: 64rem;
+  border-radius: 18px; background: var(--ink); color: var(--paper); text-decoration: none; transition: background .2s;
+}
+.case-next:hover { background: var(--proof); }
+.case-next span { font-size: 0.9rem; opacity: 0.75; }
+.case-next strong { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1; }
+.case-next em { font-style: normal; opacity: 0.85; }
+
 @media (max-width: 900px) {
   .hero, .system { grid-template-columns: minmax(0, 1fr); }
+  .evidence div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .chain { max-height: 360px; }
 }
 @media (max-width: 520px) {

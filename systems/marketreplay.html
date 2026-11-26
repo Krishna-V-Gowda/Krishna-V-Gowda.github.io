@@ -1,7 +1,87 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle."><meta name="theme-color" content="#061017"><meta property="og:type" content="article"><meta property="og:site_name" content="KVG / Lab"><meta property="og:title" content="MarketReplay — KVG / Lab"><meta property="og:description" content="A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle."><meta property="og:url" content="https://krishna-v-gowda.github.io/systems/marketreplay.html"><meta property="og:image" content="https://krishna-v-gowda.github.io/assets/og/marketreplay.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="MarketReplay technical cover"><meta name="twitter:title" content="MarketReplay — KVG / Lab"><meta name="twitter:description" content="A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle."><meta name="twitter:image" content="https://krishna-v-gowda.github.io/assets/og/marketreplay.png"><meta name="twitter:card" content="summary_large_image"><title>MarketReplay — KVG / Lab</title><link rel="canonical" href="https://krishna-v-gowda.github.io/systems/marketreplay.html"><link rel="stylesheet" href="../styles.css">  <!-- KVG / LAB canonical browser identity -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MarketReplay — Krishna V. Gowda</title>
+  <meta name="description" content="A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle.">
+  <meta name="theme-color" content="#edf1f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Krishna V. Gowda">
+  <meta property="og:title" content="MarketReplay — Krishna V. Gowda">
+  <meta property="og:description" content="A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle.">
+  <meta property="og:url" content="https://krishna-v-gowda.github.io/systems/marketreplay.html">
+  <meta property="og:image" content="https://krishna-v-gowda.github.io/assets/og/marketreplay.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="MarketReplay: Reconstruct the market state. Prove the state.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://krishna-v-gowda.github.io/systems/marketreplay.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="/assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
   <link rel="icon" href="/favicon-16x16.png?v=kvg-exact-1" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kvg-exact-1">
   <link rel="manifest" href="/site.webmanifest?v=kvg-exact-1">
-</head><body><a class="skip" href="#case">Skip to case study</a><header><div class="shell"><nav class="nav"><a class="brand" href="../index.html">KVG / LAB</a><div class="navlinks"><a href="../index.html#systems">Systems</a><a href="../index.html#method">Method</a><a href="https://github.com/Krishna-V-Gowda/MarketReplay">Source</a></div></nav><div class="system-hero"><p class="eyebrow teal">SYSTEMS + PROTOCOLS</p><h1>MarketReplay</h1><p class="lede">Reconstruct the market state. Prove the state.</p><div class="actions"><a class="button primary" href="https://github.com/Krishna-V-Gowda/MarketReplay">Inspect source</a><a class="button" href="../index.html#systems">Back to atlas</a></div></div><img class="system-cover" src="../assets/marketreplay.svg" alt="MarketReplay technical cover" width="1280" height="640"></div></header><main id="case" class="section shell"><div class="case-grid"><nav class="toc" aria-label="Case study sections"><p class="eyebrow">CASE STUDY</p><a href="#proposition">Proposition</a><a href="#difficulty">What is difficult</a><a href="#evidence">Evidence</a><a href="#boundary">Claim boundary</a><a href="#source">Deep inspection</a></nav><article class="prose"><section id="proposition"><h2>Proposition</h2><p>A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle.</p></section><section id="difficulty"><h2>What is technically difficult</h2><p>One incorrect byte offset, partial fill, cancellation, replacement, or level update can silently corrupt every downstream state. The repository makes those errors observable through typed decoding, reconstructed invariants, canonical output, malformed-input tests, and cross-language differential evidence.</p></section><section id="evidence"><h2>Evidence</h2><table class="evidence-table"><tr><th>Native core</th><td>17 C++ tests for decoder and state transitions.</td></tr><tr><th>Independent reference</th><td>5 Python oracle tests and exact canonical-state identity.</td></tr><tr><th>Adversarial matrix</th><td>18 differential scenarios and 128 deterministic corruptions.</td></tr><tr><th>Retained workload</th><td>500,000 synthetic messages with environment and raw timings preserved.</td></tr></table></section><section id="boundary"><h2>Where the claim stops</h2><div class="callout">Documented subset only. No live transport, sequence-gap recovery, captured proprietary feed, exchange certification, or universal performance claim.</div></section><section id="source"><h2>Deep inspection</h2><p>The repository is the authoritative technical artifact. Start with its README, then architecture, tests, retained evidence, and limitations.</p><div class="actions"><a class="button primary" href="https://github.com/Krishna-V-Gowda/MarketReplay">Open repository</a></div></section></article></div></main><footer class="shell footer"><span>Krishna V. Gowda · KVG / Lab</span><span>MarketReplay</span></footer></body></html>
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+  <script src="/assets/site.js" defer></script>
+  <script type="module" src="/assets/scenes.js"></script>
+</head>
+<body>
+<a class="skip" href="#case">Skip to the case study</a>
+
+<header class="top">
+  <a class="name" href="/">Krishna V. Gowda</a>
+  <nav aria-label="Sections">
+    <a href="/#systems">All work</a>
+    <a href="/#method">How I work</a>
+    <a href="https://github.com/Krishna-V-Gowda/MarketReplay">Source</a>
+  </nav>
+</header>
+
+<main id="case" class="case">
+  <section class="case-hero" aria-labelledby="case-title">
+    <a class="back" href="/#systems">All work</a>
+    <h1 id="case-title">MarketReplay</h1>
+    <p class="case-tag">Reconstruct the market state. Prove the state.</p>
+    <p class="case-what">A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle.</p>
+    <p class="links"><a href="https://github.com/Krishna-V-Gowda/MarketReplay">Inspect source</a></p>
+  </section>
+
+  <section class="case-demo" aria-label="Live proof">
+    <div class="demo" data-demo="book">
+        <div class="demo-bar"><span>Replaying 700 real messages from the test fixture</span><button type="button" class="replay">Replay</button></div>
+        <div class="book-wrap"><canvas class="book" width="640" height="300" aria-label="Order book depth by price level"></canvas></div>
+        <dl class="counters">
+          <div><dt>Messages</dt><dd data-k="msgs">0</dd></div>
+          <div><dt>Resting orders</dt><dd data-k="orders">0</dd></div>
+          <div><dt>Invariant checks</dt><dd data-k="checks">0</dd></div>
+        </dl>
+        <p class="fine">The largest price levels, buy and sell. After every message, the shares on each level must equal the sum of the orders resting there; one mismatch would stop the replay. Prices come from the project's synthetic test fixture.</p>
+      </div>
+    <figure class="terrain">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">The same 700 messages as a landscape: price runs across, time runs back, and height is the shares resting at each price.</figcaption>
+        </figure>
+  </section>
+
+  <div class="case-body">
+    <section id="difficulty"><h2>The hard part</h2><p>One incorrect byte offset, partial fill, cancellation, replacement, or level update can silently corrupt every downstream state. The repository makes those errors observable through typed decoding, reconstructed invariants, canonical output, malformed-input tests, and cross-language differential evidence.</p></section>
+    <section id="evidence"><h2>The evidence</h2><dl class="evidence"><div><dt>Native core</dt><dd>17 C++ tests for decoder and state transitions.</dd></div><div><dt>Independent reference</dt><dd>5 Python oracle tests and exact canonical-state identity.</dd></div><div><dt>Adversarial matrix</dt><dd>18 differential scenarios and 128 deterministic corruptions.</dd></div><div><dt>Retained workload</dt><dd>500,000 synthetic messages with environment and raw timings preserved.</dd></div></dl></section>
+    <section id="boundary"><h2>Where the claim stops</h2><p class="boundary">Documented subset only. No live transport, sequence-gap recovery, captured proprietary feed, exchange certification, or universal performance claim.</p></section>
+    <section id="source"><h2>Go deeper</h2><p>The repository is the authoritative technical artifact. Start with its README, then architecture, tests, retained evidence, and limitations.</p><p class="links"><a href="https://github.com/Krishna-V-Gowda/MarketReplay">Open repository</a></p></section>
+  </div>
+
+  <a class="case-next" href="/systems/trustbench.html"><span>Next</span><strong>TrustBench × Apex</strong><em>Test whether analytical software tells the truth.</em></a>
+</main>
+
+<footer class="foot">
+  <span>Krishna V. Gowda, Bengaluru</span>
+  <span>No trackers. The live proof uses the project's own published data.</span>
+</footer>
+</body>
+</html>

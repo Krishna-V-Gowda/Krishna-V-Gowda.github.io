@@ -48,29 +48,60 @@ function lights(THREE, scene) {
 
 /* ---------- The chain: one interlocked link per sealed Record entry ---------- */
 
-function chainScene(THREE) {
+/** A chain link's centreline: two straights joined by half circles (a stadium), so links hook like real chain. */
+function stadiumCurve(THREE, r, h) {
+  class Stadium extends THREE.Curve {
+    getPoint(t, target = new THREE.Vector3()) {
+      const per = 2 * Math.PI * r + 4 * h;
+      let s = t * per;
+      if (s < 2 * h) return target.set(-h + s, -r, 0);
+      s -= 2 * h;
+      if (s < Math.PI * r) { const a = -Math.PI / 2 + s / r; return target.set(h + r * Math.cos(a), r * Math.sin(a), 0); }
+      s -= Math.PI * r;
+      if (s < 2 * h) return target.set(h - s, r, 0);
+      s -= 2 * h;
+      const a = Math.PI / 2 + s / r;
+      return target.set(-h + r * Math.cos(a), r * Math.sin(a), 0);
+    }
+  }
+  return new Stadium();
+}
+
+async function chainScene(THREE) {
   const canvas = document.querySelector(".chain3d canvas");
   if (!canvas) return;
   const N = 17;
-  const GAP = 0.62; // ring radius 0.42 and tube 0.1 leave clearance at this spacing, so the rings truly interlock
+  // Bend radius R, half-straight H, wire T. Pitch 2(H+R) - 2T - 0.02 seats each bend inside the next link with clearance.
+  const R = 0.26, H = 0.22, T = 0.075;
+  const PITCH = 2 * (H + R) - 2 * T - 0.02;
   const renderer = makeRenderer(THREE, canvas);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
-  lights(THREE, scene);
+  const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
+  try {
+    const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+    scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+  } catch {
+    lights(THREE, scene); // studio reflections unavailable; plain lighting still reads well
+  }
 
   const group = new THREE.Group();
   scene.add(group);
-  const geometry = new THREE.TorusGeometry(0.42, 0.1, 20, 72);
-  const palette = { pending: new THREE.Color(css("--rule")), ok: new THREE.Color(css("--proof")), bad: new THREE.Color(css("--refuse")) };
+  const geometry = new THREE.TubeGeometry(stadiumCurve(THREE, R, H), 160, T, 18, true);
+  const palette = { pending: new THREE.Color("#b9c2cf"), ok: new THREE.Color(css("--proof")), bad: new THREE.Color(css("--refuse")) };
   const links = Array.from({ length: N }, (_, i) => {
-    const material = new THREE.MeshStandardMaterial({ color: palette.pending.clone(), metalness: 0.35, roughness: 0.28 });
+    const material = new THREE.MeshPhysicalMaterial({ color: palette.pending.clone(), metalness: 1, roughness: 0.24, clearcoat: 0.7, clearcoatRoughness: 0.12 });
     const mesh = new THREE.Mesh(geometry, material);
-    if (i % 2) mesh.rotation.x = Math.PI / 2;
+    mesh.rotation.order = "ZXY";
     group.add(mesh);
-    return { mesh, target: palette.pending.clone(), x: 0, tx: 0 };
+    return { mesh, target: palette.pending.clone(), x: 0, tx: 0, drop: 0, tdrop: 0 };
   });
-  const span = (N - 1) * GAP;
-  const place = (tampered) => links.forEach((l, i) => { l.tx = i * GAP - span / 2 + (tampered && i >= 8 ? 0.55 : 0) - (tampered ? 0.27 : 0); });
+  const span = (N - 1) * PITCH;
+  const place = (tampered) => links.forEach((l, i) => {
+    l.tx = i * PITCH - span / 2 + (tampered && i >= 8 ? 0.7 : 0) - (tampered ? 0.35 : 0);
+    l.tdrop = tampered && (i === 7 || i === 8) ? 0.12 : 0;
+  });
   place(false);
   links.forEach((l) => { l.x = l.tx; });
 
@@ -80,25 +111,32 @@ function chainScene(THREE) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     const tan = Math.tan((camera.fov * Math.PI) / 360);
-    const forWidth = (span + 1.6) / (0.9 * 2 * tan * camera.aspect);
+    const forWidth = (span + 1.6) / (0.84 * 2 * tan * camera.aspect);
     const forHeight = 1.9 / (2 * tan);
     camera.position.set(0, 0.25, Math.max(forWidth, forHeight));
-    camera.lookAt(0, -0.05, 0);
+    camera.lookAt(0, -0.22, 0);
     camera.updateProjectionMatrix();
   }
   fit();
   new ResizeObserver(() => { fit(); kick(); }).observe(canvas);
 
   const draw = (t) => {
+    const k = reduceMotion ? 1 : 0.1;
+    const halfSpan = span / 2 + 0.8;
+    const sagDepth = 0.42 + (reduceMotion ? 0 : Math.sin(t * 0.6) * 0.05);
     links.forEach((l, i) => {
-      l.x += (l.tx - l.x) * (reduceMotion ? 1 : 0.1);
-      const sag = -0.32 * (1 - (l.x / (span / 2 + 0.6)) ** 2);
-      l.mesh.position.set(l.x, sag + (reduceMotion ? 0 : Math.sin(t * 1.1 + i * 0.45) * 0.03), 0);
-      l.mesh.material.color.lerp(l.target, reduceMotion ? 1 : 0.14);
+      l.x += (l.tx - l.x) * k;
+      l.drop += (l.tdrop - l.drop) * k;
+      const u = l.x / halfSpan;
+      const wave = reduceMotion ? 0 : Math.sin(t * 1.3 - i * 0.5) * 0.025;
+      // Drape along a gentle curve; each link turns to follow its slope, alternate links stand at right angles.
+      l.mesh.position.set(l.x, -sagDepth * (1 - u * u) - l.drop + wave, 0);
+      l.mesh.rotation.z = Math.atan((2 * sagDepth * u) / halfSpan);
+      l.mesh.rotation.x = (i % 2 ? Math.PI / 2 : 0) + (reduceMotion ? 0 : Math.sin(t * 0.9 + i * 0.7) * 0.06);
+      l.mesh.material.color.lerp(l.target, reduceMotion ? 1 : 0.12);
     });
-    // A three-quarter tilt keeps both link orientations visible, so it reads as interlocked chain.
-    group.rotation.x = 0.78 + (reduceMotion ? 0 : Math.sin(t * 0.45) * 0.22);
-    group.rotation.y = reduceMotion ? 0 : Math.sin(t * 0.27) * 0.12;
+    group.rotation.x = 0.42 + (reduceMotion ? 0 : Math.sin(t * 0.35) * 0.1);
+    group.rotation.y = reduceMotion ? 0 : Math.sin(t * 0.23) * 0.035;
     renderer.render(scene, camera);
   };
   const kick = runWhenVisible(canvas, draw);
@@ -117,7 +155,7 @@ function chainScene(THREE) {
 async function terrainScene(THREE) {
   const canvas = document.querySelector(".terrain canvas");
   if (!canvas) return;
-  const data = await fetch("assets/data/itch-slice.json").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const data = await fetch("/assets/data/itch-slice.json").then((r) => (r.ok ? r.json() : null)).catch(() => null);
   if (!data) return;
 
   const COLS = 30;
@@ -209,7 +247,7 @@ async function terrainScene(THREE) {
 if (!hasWebGL()) {
   document.documentElement.classList.add("no-webgl");
 } else {
-  import("https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js")
+  import("three")
     .then((THREE) => {
       chainScene(THREE);
       terrainScene(THREE);

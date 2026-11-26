@@ -119,7 +119,7 @@ async function initRecord() {
   if (!list) return;
   let record;
   try {
-    record = await getJSON("assets/data/record.json");
+    record = await getJSON("/assets/data/record.json");
   } catch (err) {
     status.textContent = "Could not load the record";
     status.className = "chain-status bad";
@@ -223,7 +223,7 @@ async function coverUp(entries, k) {
 async function initProofloom() {
   const el = $('[data-demo="proofloom"]');
   if (!el) return;
-  const d = await getJSON("assets/data/proofloom-settlement.json").catch(() => null);
+  const d = await getJSON("/assets/data/proofloom-settlement.json").catch(() => null);
   if (!d) return;
   const k = (name) => $(`[data-k="${name}"]`, el);
   const gross = d.payments.reduce((a, b) => a + b, 0);
@@ -267,7 +267,7 @@ async function initProofloom() {
 async function initBook() {
   const el = $('[data-demo="book"]');
   if (!el) return;
-  const d = await getJSON("assets/data/itch-slice.json").catch(() => null);
+  const d = await getJSON("/assets/data/itch-slice.json").catch(() => null);
   if (!d) return;
   const canvas = $("canvas", el);
   const k = (name) => $(`[data-k="${name}"]`, el);
@@ -411,7 +411,7 @@ const REGIME_NAMES = { calm: "Calm", correlation_shock: "Crash", recovery: "Reco
 async function initRisk() {
   const el = $('[data-demo="risk"]');
   if (!el) return;
-  const d = await getJSON("assets/data/risklab-wealth.json").catch(() => null);
+  const d = await getJSON("/assets/data/risklab-wealth.json").catch(() => null);
   if (!d) return;
   const svg = $("svg", el);
   const W = 640, H = 300, L = 44, R = 12, T = 26, B = 24;
