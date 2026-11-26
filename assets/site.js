@@ -1,6 +1,13 @@
 "use strict";
 
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/** A short vibration at meaningful moments, where the device supports it (Android browsers; iOS ignores it). */
+const buzz = (pattern) => { if (!reduceMotion && navigator.vibrate) try { navigator.vibrate(pattern); } catch {} };
+/** Tell the 3D scenes what a demo just did; the latest state is kept in case a scene loads afterwards. */
+const tell = (name, detail) => {
+  (window.demoState ||= {})[name] = detail;
+  window.dispatchEvent(new CustomEvent(`demo:${name}`, { detail }));
+};
 const $ = (sel, root = document) => root.querySelector(sel);
 const sleep = (ms) => (reduceMotion ? Promise.resolve() : new Promise((r) => setTimeout(r, ms)));
 const frame = () => new Promise((r) => requestAnimationFrame(r));
@@ -17,7 +24,7 @@ async function getJSON(path) {
 /** Start a demo the first time it is mostly on screen; its Replay button runs it again. */
 function whenVisible(el, start) {
   const button = $(".replay", el);
-  if (button) button.addEventListener("click", start);
+  if (button) button.addEventListener("click", () => { buzz(8); start(); });
   const io = new IntersectionObserver((entries) => {
     if (entries.some((e) => e.isIntersecting)) {
       io.disconnect();
@@ -184,6 +191,7 @@ async function initRecord() {
     if (run !== list._run) return;
     if (good === entries.length) {
       status.textContent = sigCheck ? `All ${good} entries verify` : `All ${good} hashes and links verify`;
+      buzz(fast ? [12, 40, 12] : 12);
       status.className = "chain-status ok";
       const confirmed = record.receipts.filter((r) => r.status === "confirmed" && r.bitcoin.length);
       const last = confirmed.reduce((a, b) => (b.headSeq > a.headSeq ? b : a), confirmed[0]);
@@ -192,6 +200,7 @@ async function initRecord() {
         : "";
     } else {
       status.textContent = "Tampering caught";
+      buzz([40, 60, 40, 60, 90]);
       status.className = "chain-status bad";
       list.scrollTo({ top: rows[7].offsetTop - 12, behavior: reduceMotion ? "auto" : "smooth" });
       anchor.textContent = sigCheck
@@ -230,6 +239,7 @@ async function initProofloom() {
   const consistent = gross - d.refunds - d.fees - d.tax === d.expected;
   whenVisible(el, async () => {
     const run = token(el);
+    tell("proofloom", { state: "running" });
     ["refunds", "fees", "tax", "expected", "reported", "diff"].forEach((n) => (k(n).textContent = ""));
     k("verdict").innerHTML = "";
     $(".ledger-row.diff", el).classList.remove("bad");
@@ -254,6 +264,8 @@ async function initProofloom() {
     const diff = d.expected - d.reported;
     k("diff").textContent = inr(diff);
     $(".ledger-row.diff", el).classList.toggle("bad", diff !== 0);
+    tell("proofloom", { state: consistent && diff !== 0 ? "refused" : "allowed", diff });
+    if (consistent && diff !== 0) buzz([30, 50, 90]);
     k("verdict").innerHTML = !consistent
       ? "The published records don't add up; this demo stopped."
       : diff === 0
@@ -351,6 +363,7 @@ async function initBook() {
     k("msgs").textContent = d.events.length.toLocaleString("en-US");
     k("orders").textContent = orders.size.toLocaleString("en-US");
     k("checks").textContent = `${checks.toLocaleString("en-US")} passed`;
+    buzz(10);
     draw(levels);
   });
 }
@@ -366,6 +379,7 @@ function initApex() {
   const k = (name) => $(`[data-k="${name}"]`, el);
   whenVisible(el, async () => {
     const run = token(el);
+    tell("apex", { state: "running" });
     k("before").style.width = "0";
     k("after").style.width = "0";
     k("verdict").innerHTML = "";
@@ -390,6 +404,8 @@ function initApex() {
     await scramble(live, hash, 900);
     const match = hash === APEX_FINGERPRINT;
     live.className = match ? "match" : "nomatch";
+    tell("apex", { state: match ? "match" : "changed", hash });
+    buzz(match ? 15 : [40, 60, 40]);
     k("verdict").innerHTML = match
       ? '<span class="stamp good stamp-in">Match</span><span>The live app is exactly the build TrustBench verified.</span>'
       : '<span class="stamp bad stamp-in">Changed</span><span>The live app differs from the verified build.</span>';
@@ -529,6 +545,7 @@ function initGradient() {
         draw(w, b);
         k("step").textContent = s;
         k("loss").textContent = loss(w, b).toFixed(4);
+        tell("gd", { w, b, step: s });
         if (!reduceMotion) await sleep(28);
       }
       let gw = 0, gb = 0;

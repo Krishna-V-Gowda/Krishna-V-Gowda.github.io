@@ -89,7 +89,9 @@ code, .num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums
 .chain3d canvas, .terrain canvas { display: block; width: 100%; height: 100%; aspect-ratio: auto; }
 .terrain { margin: 10px 0 0; }
 .terrain canvas { height: clamp(180px, 22vw, 260px); }
-.no-webgl .chain3d, .no-webgl .terrain { display: none; }
+.sig { margin: 10px 0 0; }
+.sig canvas { display: block; width: 100%; height: clamp(200px, 24vw, 280px); aspect-ratio: auto; }
+.no-webgl .chain3d, .no-webgl .terrain, .no-webgl .sig { display: none; }
 
 /* The chain */
 .chain-panel { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 18px; padding: 18px 18px 14px; min-width: 0; }

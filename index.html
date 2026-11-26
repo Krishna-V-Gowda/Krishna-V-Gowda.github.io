@@ -87,6 +87,10 @@
         <p class="proof">One settlement looks fine and is short by 137 paise. Proofloom refuses to close it, and no model or reviewer can override that.</p>
         <p class="limits">Synthetic data. No real money moves.</p>
         <p class="links"><a href="systems/proofloom.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/proofloom">Source</a></p>
+        <figure class="sig" data-sig="proofloom">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">Expected settlement on one pan, the processor&rsquo;s report on the other. When the close is refused, the beam drops and stays down.</figcaption>
+        </figure>
       </div>
       <div class="demo" data-demo="proofloom">
         <div class="demo-bar"><span>Settlement set_demo_04, rebuilt from its 21 payments</span><button type="button" class="replay">Replay</button></div>
@@ -134,6 +138,10 @@
         <p class="proof">The first run passed 7 of 16 checks. After the fixes, 15 of 16. TrustBench recorded the fingerprint of the fixed code, and this panel checks that the live app still matches it.</p>
         <p class="limits">Checks one documented Apex release, not any analytics tool.</p>
         <p class="links"><a href="systems/trustbench.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/TrustBench">TrustBench</a><a href="https://krishna-v-gowda.github.io/EDA-InsightLab-Apex/">Open Apex</a></p>
+        <figure class="sig" data-sig="trustbench">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">Each bar is one byte of a fingerprint. The inner ring is what TrustBench recorded; the outer ring settles onto the live app&rsquo;s bytes once your browser has hashed it.</figcaption>
+        </figure>
       </div>
       <div class="demo" data-demo="apex">
         <div class="demo-bar"><span>Fingerprinting the live Apex app now</span><button type="button" class="replay">Check again</button></div>
@@ -156,6 +164,10 @@
         <p class="proof">Six methods run through a simulated market with a calm spell, a crash, a recovery and an inflation scare. The crash is brutal on purpose, so every method loses. What matters is which loses least, and whether that difference is real.</p>
         <p class="limits">Simulated markets, not historical returns or advice.</p>
         <p class="links"><a href="systems/risklab.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/RiskLab">Source</a></p>
+        <figure class="sig" data-sig="risklab">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">The same six wealth paths as walls in depth: the lowest in front, the best (blue) at the back. The pale plane is the ₹1 they started with.</figcaption>
+        </figure>
       </div>
       <div class="demo" data-demo="risk">
         <div class="demo-bar"><span>₹1 invested in each method, day by day</span><button type="button" class="replay">Replay</button></div>
@@ -171,6 +183,10 @@
         <p class="proof">Each lab's maths is a small, separate module with its own tests, so what students see is the algorithm, not the interface around it.</p>
         <p class="limits">Teaching-scale models in two dimensions.</p>
         <p class="links"><a href="systems/data301.html">Case study</a><a href="https://data301-ml-studio.vercel.app/">Open the studio</a></p>
+        <figure class="sig" data-sig="data301">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">The real error surface for the lab&rsquo;s points. The ball is gradient descent, moving step for step with the panel.</figcaption>
+        </figure>
       </div>
       <div class="demo" data-demo="gd">
         <div class="demo-bar"><span>Gradient descent fitting a line, like the studio's first lab</span><button type="button" class="replay">Replay</button></div>

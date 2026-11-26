@@ -27,7 +27,9 @@
   <link rel="icon" href="/favicon-16x16.png?v=kvg-exact-1" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kvg-exact-1">
   <link rel="manifest" href="/site.webmanifest?v=kvg-exact-1">
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
   <script src="/assets/site.js" defer></script>
+  <script type="module" src="/assets/scenes.js"></script>
 </head>
 <body>
 <a class="skip" href="#case">Skip to the case study</a>
@@ -60,6 +62,10 @@
         </dl>
       </div>
     
+    <figure class="sig" data-sig="data301">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">The real error surface for the lab&rsquo;s points. The ball is gradient descent, moving step for step with the panel.</figcaption>
+        </figure>
   </section>
 
   <div class="case-body">

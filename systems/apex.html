@@ -27,7 +27,9 @@
   <link rel="icon" href="/favicon-16x16.png?v=kvg-exact-1" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kvg-exact-1">
   <link rel="manifest" href="/site.webmanifest?v=kvg-exact-1">
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
   <script src="/assets/site.js" defer></script>
+  <script type="module" src="/assets/scenes.js"></script>
 </head>
 <body>
 <a class="skip" href="#case">Skip to the case study</a>
@@ -64,6 +66,10 @@
         <p class="verdict" data-k="verdict" aria-live="polite"></p>
       </div>
     
+    <figure class="sig" data-sig="trustbench">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">Each bar is one byte of a fingerprint. The inner ring is what TrustBench recorded; the outer ring settles onto the live app&rsquo;s bytes once your browser has hashed it.</figcaption>
+        </figure>
   </section>
 
   <div class="case-body">
