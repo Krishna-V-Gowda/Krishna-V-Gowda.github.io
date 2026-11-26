@@ -21,7 +21,8 @@ function runWhenVisible(canvas, draw) {
     draw(ms / 1000);
     raf = visible && !document.hidden && !reduceMotion ? requestAnimationFrame(loop) : 0;
   };
-  const kick = () => { if (!raf) raf = requestAnimationFrame(loop); };
+  // Off screen, a request is simply dropped: the scene draws its latest state when it comes back into view.
+  const kick = () => { if (visible && !raf) raf = requestAnimationFrame(loop); };
   new IntersectionObserver((entries) => {
     visible = entries[0].isIntersecting;
     if (visible) kick();
@@ -552,7 +553,7 @@ function ribbonsScene(THREE) {
     const s = await stage(THREE, canvas, 32);
     s.camera.position.set(3.4, 2.6, 6.2);
     s.camera.lookAt(0, 0.7, 0);
-    const ranked = Object.entries(data.curves).sort((a, b) => b[1].at(-1) - a[1].at(-1));
+    const ranked = Object.entries(data.curves).sort((a, b) => b[1].slice(-1)[0] - a[1].slice(-1)[0]);
     const best = ranked[0][0];
     const L = 5.6;
     const walls = ranked.map(([name, curve], rank) => {

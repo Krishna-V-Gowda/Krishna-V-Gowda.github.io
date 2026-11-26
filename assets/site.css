@@ -404,8 +404,10 @@ svg.risk { display: block; height: auto; touch-action: pan-y; cursor: crosshair;
   .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
   .tile { min-height: 74px; padding: 8px; }
   .tile .t-name { font-size: 0.95rem; }
-  .cal { grid-template-columns: 4.2em repeat(10, minmax(0, 1fr)); gap: 3px; font-size: 0.72rem; }
-  .cell { min-height: 0; border-radius: 6px; }
+  .cal { grid-template-columns: 4.4em repeat(10, minmax(30px, 1fr)); gap: 4px; font-size: 0.74rem; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding-bottom: 2px; }
+  .cal::-webkit-scrollbar { display: none; }
+  .cal .who, .cal .cov-label, .cal > span:first-child { position: sticky; left: 0; z-index: 1; background: var(--surface); }
+  .cell { min-height: 30px; border-radius: 7px; }
   .hexgrid { font-size: 0.75rem; gap: 2px; }
   .top nav a[href^="https"] { display: none; }
   .top { position: static; }

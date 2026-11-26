@@ -416,7 +416,7 @@ async function initBook() {
       ctx.fillStyle = side === "S" ? color("--g2") : color("--proof");
       ctx.globalAlpha = 0.88;
       ctx.beginPath();
-      ctx.roundRect(labelW, y + rowH * 0.18, Math.max(3, barW), rowH * 0.64, 4);
+      if (ctx.roundRect) ctx.roundRect(labelW, y + rowH * 0.18, Math.max(3, barW), rowH * 0.64, 4); else ctx.rect(labelW, y + rowH * 0.18, Math.max(3, barW), rowH * 0.64);
       ctx.fill();
       ctx.globalAlpha = 1;
       ctx.fillStyle = color("--muted");
@@ -588,7 +588,7 @@ async function initRisk() {
   const x = (i) => L + ((W - L - R) * i) / (n - 1);
   const xDay = (day) => L + ((W - L - R) * Math.min(day, d.days)) / d.days;
   const y = (v) => T + ((H - T - B) * (hi - v)) / (hi - lo);
-  const ranked = Object.entries(d.curves).sort((a, b) => b[1].at(-1) - a[1].at(-1));
+  const ranked = Object.entries(d.curves).sort((a, b) => b[1].slice(-1)[0] - a[1].slice(-1)[0]);
   const palette = ["--proof", "--ink", "--g1", "--g2", "--g3", "--g4"];
   const hue = Object.fromEntries(ranked.map(([name], i) => [name, color(palette[i])]));
   const hidden = new Set();
@@ -630,7 +630,7 @@ async function initRisk() {
     add("line", { x1: 0, x2: 0, y1: T, y2: H - B, stroke: color("--ink"), "stroke-width": 1 }, null, cross);
     const dots = Object.fromEntries(ranked.map(([name]) => [name, add("circle", { r: 4, fill: hue[name], stroke: color("--surface"), "stroke-width": 2 }, null, cross)]));
     svg._cross = { g: cross, dots };
-    legend.innerHTML = ranked.map(([name, curve]) => `<li><button type="button" aria-pressed="true" data-m="${name}"><i style="background:${hue[name]}"></i>${METHOD_NAMES[name] || name} <span class="num">₹${curve.at(-1).toFixed(2)}</span></button></li>`).join("");
+    legend.innerHTML = ranked.map(([name, curve]) => `<li><button type="button" aria-pressed="true" data-m="${name}"><i style="background:${hue[name]}"></i>${METHOD_NAMES[name] || name} <span class="num">₹${curve.slice(-1)[0].toFixed(2)}</span></button></li>`).join("");
     legend.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
       const m = b.dataset.m;
       if (hidden.has(m)) hidden.delete(m); else if (hidden.size < ranked.length - 1) hidden.add(m); else return;
@@ -653,7 +653,7 @@ async function initRisk() {
     const shown = ranked.filter(([m]) => !hidden.has(m));
     for (const [m, c] of ranked) { dots[m].setAttribute("cx", x(i)); dots[m].setAttribute("cy", y(c[i])); dots[m].setAttribute("opacity", hidden.has(m) ? 0 : 1); }
     const sorted = [...shown].sort((a, b) => b[1][i] - a[1][i]);
-    readout.innerHTML = `<b>Day ${day}, ${REGIME_NAMES[regime.name]}.</b> Ahead: ${METHOD_NAMES[sorted[0][0]]} at ₹${sorted[0][1][i].toFixed(2)}. Behind: ${METHOD_NAMES[sorted.at(-1)[0]]} at ₹${sorted.at(-1)[1][i].toFixed(2)}.`;
+    readout.innerHTML = `<b>Day ${day}, ${REGIME_NAMES[regime.name]}.</b> Ahead: ${METHOD_NAMES[sorted[0][0]]} at ₹${sorted[0][1][i].toFixed(2)}. Behind: ${METHOD_NAMES[sorted.slice(-1)[0][0]]} at ₹${sorted.slice(-1)[0][1][i].toFixed(2)}.`;
     if (svg._i !== undefined && Math.abs(svg._i - i) >= 3) tickThrottled();
     svg._i = i;
   }

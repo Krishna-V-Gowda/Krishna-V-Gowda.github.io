@@ -1,21 +1,14 @@
 {
-  "name": "KVG / LAB \u2014 Systems Atlas",
-  "short_name": "KVG / LAB",
-  "description": "Systems that make hidden assumptions inspectable.",
+  "name": "Krishna V. Gowda",
+  "short_name": "Krishna",
+  "description": "Systems that prove they're right, checked live in your browser.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#061017",
-  "theme_color": "#061017",
+  "background_color": "#08090a",
+  "theme_color": "#08090a",
   "icons": [
-    {
-      "src": "/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "/icon-192x192.png?v=kvg-2", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512x512.png?v=kvg-2", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512x512.png?v=kvg-2", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
