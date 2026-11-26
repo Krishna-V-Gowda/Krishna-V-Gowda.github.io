@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dayflow — Krishna V. Gowda</title>
+  <meta name="description" content="An HR system that previews the consequences of a decision before anyone makes it: approve this leave, and here is what happens to team coverage.">
+  <meta name="theme-color" content="#eef0f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111218" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Krishna V. Gowda">
+  <meta property="og:title" content="Dayflow — Krishna V. Gowda">
+  <meta property="og:description" content="An HR system that previews the consequences of a decision before anyone makes it: approve this leave, and here is what happens to team coverage.">
+  <meta property="og:url" content="https://krishna-v-gowda.github.io/systems/dayflow.html">
+  <meta property="og:image" content="https://krishna-v-gowda.github.io/assets/og/dayflow.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Dayflow: Every workday, intelligently aligned.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://krishna-v-gowda.github.io/systems/dayflow.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/assets/site.css">
+  <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
+  <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
+  <link rel="icon" href="/favicon-16x16.png?v=kvg-exact-1" type="image/png" sizes="16x16">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kvg-exact-1">
+  <link rel="manifest" href="/site.webmanifest?v=kvg-exact-1">
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+  <script src="/assets/site.js" defer></script>
+  <script type="module" src="/assets/scenes.js"></script>
+</head>
+<body>
+<a class="skip" href="#case">Skip to the case study</a>
+
+<header class="top">
+  <a class="name" href="/">Krishna V. Gowda</a>
+  <nav aria-label="Sections">
+    <a href="/#systems">All work</a>
+    <a href="/#method">How I work</a>
+    <a href="https://github.com/Krishna-V-Gowda/dayflow-hrms">Source</a>
+  </nav>
+</header>
+
+<main id="case" class="case" style="--acc: var(--c-dayflow)">
+  <section class="case-hero" aria-labelledby="case-title">
+    <a class="back" href="/#systems">All work</a>
+    <h1 id="case-title">Dayflow</h1>
+    <p class="case-tag">Every workday, intelligently aligned.</p>
+    <p class="case-what">An explainable workforce system that joins attendance, leave, workforce and payroll records, so HR can see what a decision does to the team before making it.</p>
+    <p class="links"><a href="https://github.com/Krishna-V-Gowda/dayflow-hrms">Inspect source</a></p>
+  </section>
+
+  <section class="case-demo" aria-label="Live proof">
+    <div class="demo" data-demo="dayflow">
+        <div class="demo-bar"><span>Engineering, the next two weeks. Tap a day to request leave.</span><button type="button" class="replay">Reset</button></div>
+        <div class="cal" data-k="cal"></div>
+        <div class="decision" data-k="decision" aria-live="polite"></div>
+      </div>
+  </section>
+
+  <div class="case-body">
+    <section id="difficulty"><h2>The hard part</h2><p>Most HR systems record a decision after it happens. Dayflow&rsquo;s question comes first: what happens if we approve this? Its decision engine reads the team, every approved and pending absence that overlaps the requested dates, and recalculates coverage from stored records. It returns current and projected coverage, the change, a risk call and its reasons in plain sentences. It never approves anything on its own; HR decides, and the decision is kept in an audit trail.</p></section>
+    <section id="evidence"><h2>The evidence</h2><dl class="evidence"><div><dt>Decision rules</dt><dd>High risk below 60% projected coverage or with three or more people away; moderate below 80% or when another pending request overlaps; otherwise low. The panel above runs these exact rules.</dd></div><div><dt>Explainable signals</dt><dd>Attendance flags name the rule that fired: a missing checkout, a shift under four hours, a shift over ten. No lateness score is invented without a configured work-time baseline.</dd></div><div><dt>Boundaries</dt><dd>JWT authentication and server-side roles: an employee asking for the HR-only staff list gets HTTP 403.</dd></div><div><dt>Integrity</dt><dd>Automated backend tests, including payroll that refuses deductions above pay and rounds net pay to the paisa.</dd></div></dl></section>
+    <section id="boundary"><h2>Where the claim stops</h2><p class="boundary">A local demo with a sample workforce, not a production deployment. The people in the panel above are illustrative.</p></section>
+    <section id="source"><h2>Go deeper</h2><p>The repository is the authoritative technical artifact. Start with its README, then the decision engine, the tests and the screenshots of each workflow.</p><p class="links"><a href="https://github.com/Krishna-V-Gowda/dayflow-hrms">Open repository</a></p></section>
+  </div>
+
+  <a class="case-next" href="/systems/proofloom.html"><span>Next</span><strong>Proofloom</strong><em>Close the cash. Keep the proof.</em></a>
+</main>
+
+<footer class="foot">
+  <span>Krishna V. Gowda, Bengaluru</span>
+  <span>No trackers. The live proof uses the project's own published rules.</span>
+</footer>
+</body>
+</html>

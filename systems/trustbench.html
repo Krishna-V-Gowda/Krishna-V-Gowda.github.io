@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>TrustBench × Apex — Krishna V. Gowda</title>
   <meta name="description" content="TrustBench executes the exact shipped browser-side Apex source against independent numerical references and metamorphic properties; Apex is the real product subject and remediation target.">
-  <meta name="theme-color" content="#edf1f5" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#eef0f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111218" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Krishna V. Gowda">
   <meta property="og:title" content="TrustBench × Apex — Krishna V. Gowda">
@@ -20,7 +20,7 @@
   <link rel="canonical" href="https://krishna-v-gowda.github.io/systems/trustbench.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="/assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
@@ -43,7 +43,7 @@
   </nav>
 </header>
 
-<main id="case" class="case">
+<main id="case" class="case" style="--acc: var(--c-trustbench)">
   <section class="case-hero" aria-labelledby="case-title">
     <a class="back" href="/#systems">All work</a>
     <h1 id="case-title">TrustBench × Apex</h1>
@@ -59,11 +59,13 @@
           <div class="bar-row"><span>Before the fix</span><div class="bar"><i data-k="before"></i></div><span class="num">7 / 16</span></div>
           <div class="bar-row"><span>After the fix</span><div class="bar"><i data-k="after"></i></div><span class="num">15 / 16</span></div>
         </div>
-        <div class="hashes">
-          <div><span>Fingerprint TrustBench recorded</span><code>51a9853d2a465a71197a28e71d16821d69b3cbbebf6c1bdc753563c12a3688df</code></div>
-          <div><span>Fingerprint of the app online now</span><code data-k="live">…</code></div>
-        </div>
         <p class="verdict" data-k="verdict" aria-live="polite"></p>
+        <div class="control">
+          <label for="tb-text">Why a match means anything: type here and watch the fingerprint</label>
+          <input type="text" id="tb-text" data-k="text" value="Krishna" autocomplete="off" spellcheck="false">
+          <div class="hexgrid" data-k="hex" aria-hidden="true"></div>
+          <p class="fine" data-k="changed">Change one letter and about half the fingerprint changes. So when the live app&rsquo;s fingerprint matches, the code is identical, byte for byte.</p>
+        </div>
       </div>
     
     <figure class="sig" data-sig="trustbench">

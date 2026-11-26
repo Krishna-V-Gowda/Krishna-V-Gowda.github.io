@@ -1,4 +1,4 @@
-// Three.js scenes: the Record chain, the order-book landscape, and one signature object per project.
+// Three.js scenes: the hero toys, the order-book landscape, and one signature object per project, each following its demo.
 // Loaded only where WebGL works; they render only while on screen, and draw one still frame under reduced motion.
 
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -46,133 +46,203 @@ function lights(THREE, scene) {
   scene.add(rim);
 }
 
-/* ---------- The chain: one interlocked link per sealed Record entry ---------- */
+/* ---------- The hero: seven toys, one per project. Push them, fling them, tap one to visit it ---------- */
 
-/** A chain link's centreline: two straights joined by half circles (a stadium), so links hook like real chain. */
-function stadiumCurve(THREE, r, h) {
-  class Stadium extends THREE.Curve {
-    getPoint(t, target = new THREE.Vector3()) {
-      const per = 2 * Math.PI * r + 4 * h;
-      let s = t * per;
-      if (s < 2 * h) return target.set(-h + s, -r, 0);
-      s -= 2 * h;
-      if (s < Math.PI * r) { const a = -Math.PI / 2 + s / r; return target.set(h + r * Math.cos(a), r * Math.sin(a), 0); }
-      s -= Math.PI * r;
-      if (s < 2 * h) return target.set(h - s, r, 0);
-      s -= 2 * h;
-      const a = Math.PI / 2 + s / r;
-      return target.set(-h + r * Math.cos(a), r * Math.sin(a), 0);
-    }
-  }
-  return new Stadium();
-}
-
-async function chainScene(THREE) {
-  const canvas = document.querySelector(".chain3d canvas");
+async function toysScene(THREE) {
+  const canvas = document.querySelector(".toys canvas");
   if (!canvas) return;
-  const N = 17;
-  // Bend radius R, half-straight H, wire T. Pitch 2(H+R) - 2T - 0.02 seats each bend inside the next link with clearance.
-  const R = 0.26, H = 0.22, T = 0.075;
-  const PITCH = 2 * (H + R) - 2 * T - 0.02;
-  const renderer = makeRenderer(THREE, canvas);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(24, 1, 0.1, 100);
-  try {
-    const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
-    scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
-  } catch {
-    lights(THREE, scene); // studio reflections unavailable; plain lighting still reads well
-  }
+  const { RoundedBoxGeometry } = await import("three/addons/geometries/RoundedBoxGeometry.js").catch(() => ({}));
+  const s = await stage(THREE, canvas, 30);
+  s.renderer.toneMappingExposure = 1.1;
+  const hint = document.querySelector(".toys-hint");
+  const tip = document.querySelector(".toys-label");
+  const plastic = (c) => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.28, metalness: 0.05, clearcoat: 1, clearcoatRoughness: 0.08, sheen: 0.3 });
+  const shiny = (c) => new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.18, metalness: 0.9, clearcoat: 0.6, clearcoatRoughness: 0.1 });
+  const mesh = (geo, mat, x = 0, y = 0, z = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); return m; };
 
-  const group = new THREE.Group();
-  scene.add(group);
-  const geometry = new THREE.TubeGeometry(stadiumCurve(THREE, R, H), 160, T, 18, true);
-  const palette = { pending: new THREE.Color("#b9c2cf"), ok: new THREE.Color(css("--proof")), bad: new THREE.Color(css("--refuse")) };
-  const links = Array.from({ length: N }, (_, i) => {
-    const material = new THREE.MeshPhysicalMaterial({ color: palette.pending.clone(), metalness: 1, roughness: 0.24, clearcoat: 0.7, clearcoatRoughness: 0.12 });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.rotation.order = "ZXY";
-    group.add(mesh);
-    return { mesh, target: palette.pending.clone(), x: 0, tx: 0, drop: 0, tdrop: 0 };
-  });
-  const span = (N - 1) * PITCH;
-  const place = (tampered) => links.forEach((l, i) => {
-    l.tx = i * PITCH - span / 2 + (tampered && i >= 8 ? 0.7 : 0) - (tampered ? 0.35 : 0);
-    l.tdrop = tampered && (i === 7 || i === 8) ? 0.12 : 0;
-  });
-  place(false);
-  links.forEach((l) => { l.x = l.tx; });
-
-  function fit() {
-    const w = canvas.clientWidth || 1;
-    const h = canvas.clientHeight || 1;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    const tan = Math.tan((camera.fov * Math.PI) / 360);
-    const forWidth = (span + 1.6) / (0.84 * 2 * tan * camera.aspect);
-    const forHeight = 1.9 / (2 * tan);
-    camera.position.set(0, 0.25, Math.max(forWidth, forHeight));
-    camera.lookAt(0, -0.22, 0);
-    camera.updateProjectionMatrix();
-  }
-  fit();
-  new ResizeObserver(() => { fit(); kick(); }).observe(canvas);
-
-  // The chain answers the visitor: it leans toward the pointer, and a tap sends a ripple down the links.
-  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-  const plucks = [];
-  if (!reduceMotion) {
-    window.addEventListener("pointermove", (e) => {
-      pointer.tx = (e.clientX / innerWidth) * 2 - 1;
-      pointer.ty = (e.clientY / innerHeight) * 2 - 1;
-    }, { passive: true });
-    canvas.style.cursor = "pointer";
-    canvas.addEventListener("pointerdown", (e) => {
-      const r = canvas.getBoundingClientRect();
-      plucks.push({ u: ((e.clientX - r.left) / r.width) * 2 - 1, t0: null });
-      if (plucks.length > 4) plucks.shift();
-      if (navigator.vibrate) try { navigator.vibrate(10); } catch {}
-      kick();
-    });
-  }
-  const ripple = (t, ui) => plucks.reduce((sum, p) => {
-    p.t0 ??= t;
-    const dt = t - p.t0 - Math.abs(ui - p.u) * 0.55;
-    return dt > 0 ? sum + 0.2 * Math.exp(-dt * 2.6) * Math.sin(dt * 13) : sum;
-  }, 0);
-
-  const draw = (t) => {
-    const k = reduceMotion ? 1 : 0.1;
-    const halfSpan = span / 2 + 0.8;
-    pointer.x += (pointer.tx - pointer.x) * 0.05;
-    pointer.y += (pointer.ty - pointer.y) * 0.05;
-    const sagDepth = 0.42 + (reduceMotion ? 0 : Math.sin(t * 0.6) * 0.05);
-    links.forEach((l, i) => {
-      l.x += (l.tx - l.x) * k;
-      l.drop += (l.tdrop - l.drop) * k;
-      const u = l.x / halfSpan;
-      const wave = reduceMotion ? 0 : Math.sin(t * 1.3 - i * 0.5) * 0.025;
-      // Drape along a gentle curve; each link turns to follow its slope, alternate links stand at right angles.
-      l.mesh.position.set(l.x, -sagDepth * (1 - u * u) - l.drop + wave + (reduceMotion ? 0 : ripple(t, l.x / (span / 2))), 0);
-      l.mesh.rotation.z = Math.atan((2 * sagDepth * u) / halfSpan);
-      l.mesh.rotation.x = (i % 2 ? Math.PI / 2 : 0) + (reduceMotion ? 0 : Math.sin(t * 0.9 + i * 0.7) * 0.06);
-      l.mesh.material.color.lerp(l.target, reduceMotion ? 1 : 0.12);
-    });
-    group.rotation.x = 0.42 + (reduceMotion ? 0 : Math.sin(t * 0.35) * 0.1 + pointer.y * 0.12);
-    group.rotation.y = reduceMotion ? 0 : Math.sin(t * 0.23) * 0.035 + pointer.x * 0.16;
-    renderer.render(scene, camera);
+  const build = {
+    proofloom(c) { // a stack of coins
+      const g = new THREE.Group();
+      const geo = new THREE.CylinderGeometry(0.42, 0.42, 0.11, 48);
+      const gold = new THREE.MeshPhysicalMaterial({ color: c, metalness: 0.45, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.06 });
+      for (let i = 0; i < 4; i++) { const m = mesh(geo, gold, Math.sin(i * 2.3) * 0.04, -0.2 + i * 0.12, Math.cos(i * 1.9) * 0.04); g.add(m); }
+      g.rotation.x = 0.5;
+      return g;
+    },
+    marketreplay(c) { // order-book bars
+      const g = new THREE.Group();
+      [0.5, 0.85, 0.35, 0.68].forEach((h, i) => g.add(mesh(RoundedBoxGeometry ? new RoundedBoxGeometry(0.17, h, 0.17, 3, 0.05) : new THREE.BoxGeometry(0.17, h, 0.17), plastic(c), -0.3 + i * 0.2, h / 2 - 0.4, 0)));
+      return g;
+    },
+    trustbench(c) { // a ring
+      return new THREE.Group().add(mesh(new THREE.TorusGeometry(0.36, 0.13, 32, 72), plastic(c)));
+    },
+    apex(c) { // a cluster of points
+      const g = new THREE.Group();
+      const geo = new THREE.SphereGeometry(0.15, 32, 16);
+      [[0, 0, 0], [0.26, 0.12, 0.05], [-0.22, 0.18, -0.08], [0.06, -0.26, 0.12], [-0.18, -0.16, 0.2], [0.2, -0.1, -0.22], [-0.02, 0.3, 0.2]].forEach(([x, y, z], i) => {
+        const m = mesh(geo, plastic(c), x, y, z);
+        m.scale.setScalar(0.75 + (i % 3) * 0.18);
+        g.add(m);
+      });
+      return g;
+    },
+    risklab(c) { // a wealth path as a ribbon
+      const pts = Array.from({ length: 9 }, (_, i) => new THREE.Vector3(-0.55 + i * 0.14, Math.sin(i * 0.9) * 0.18 - i * 0.02, Math.cos(i * 0.7) * 0.12));
+      return new THREE.Group().add(mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 80, 0.075, 16), plastic(c)));
+    },
+    data301(c) { // the error bowl
+      const profile = Array.from({ length: 14 }, (_, i) => new THREE.Vector2(0.02 + i * 0.034, 0.05 + (i * 0.034) ** 2 * 2.6));
+      const g = new THREE.Group();
+      const bowl = mesh(new THREE.LatheGeometry(profile, 48), new THREE.MeshPhysicalMaterial({ color: c, roughness: 0.3, clearcoat: 1, side: THREE.DoubleSide }), 0, -0.25, 0);
+      g.add(bowl, mesh(new THREE.SphereGeometry(0.09, 24, 12), shiny("#e8edf3"), 0.12, -0.12, 0.05));
+      g.rotation.x = 0.45;
+      return g;
+    },
+    dayflow(c) { // a calendar block
+      const g = new THREE.Group();
+      g.add(mesh(RoundedBoxGeometry ? new RoundedBoxGeometry(0.72, 0.62, 0.22, 4, 0.08) : new THREE.BoxGeometry(0.72, 0.62, 0.22), plastic(c)));
+      const dot = new THREE.BoxGeometry(0.1, 0.08, 0.03);
+      const white = plastic("#ffffff");
+      for (let r = 0; r < 3; r++) for (let q = 0; q < 4; q++) if (r * 4 + q !== 6) g.add(mesh(dot, white, -0.22 + q * 0.147, 0.1 - r * 0.15, 0.115));
+      for (const x of [-0.18, 0.18]) g.add(mesh(new THREE.TorusGeometry(0.06, 0.022, 12, 24), shiny("#c3ccd8"), x, 0.31, 0));
+      return g;
+    },
   };
-  const kick = runWhenVisible(canvas, draw);
+  const names = { proofloom: "Proofloom", marketreplay: "MarketReplay", trustbench: "TrustBench", apex: "Apex", risklab: "RiskLab", data301: "DATA301 ML Studio", dayflow: "Dayflow" };
+  // Home positions: a loose, slightly staggered cluster.
+  const homes = { proofloom: [-1.25, 0.95], marketreplay: [0.15, 1.2], trustbench: [1.45, 0.75], apex: [-0.6, -0.05], risklab: [0.85, -0.25], data301: [-1.4, -1.05], dayflow: [0.35, -1.25] };
+  const toys = Object.keys(build).map((id, i) => {
+    const group = build[id](css(`--c-${id}`));
+    const holder = new THREE.Group();
+    holder.add(group);
+    const [hx, hy] = homes[id];
+    holder.position.set(hx, hy, 0);
+    holder.userData.id = id;
+    s.scene.add(holder);
+    return { id, holder, home: new THREE.Vector3(hx, hy, 0), v: new THREE.Vector3(), spin: new THREE.Vector3(0.2 + i * 0.03, 0.35 - i * 0.04, 0), scale: 1, phase: i * 0.9 };
+  });
 
-  const apply = ({ states, tampered }) => {
-    states.forEach((s, i) => { if (links[i]) links[i].target = palette[s] || palette.pending; });
-    place(tampered);
+  const fit = () => {
+    s.fit();
+    const tan = Math.tan((s.camera.fov * Math.PI) / 360);
+    s.camera.position.set(0, 0, Math.max(4.4 / (2 * tan * s.camera.aspect), 3.5 / (2 * tan)) + 0.6);
+    s.camera.lookAt(0, 0, 0);
+  };
+  fit();
+
+  // Pointer on the z = 0 plane, in world units.
+  const ray = new THREE.Raycaster();
+  const ndc = new THREE.Vector2();
+  const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  const hit = new THREE.Vector3();
+  const pointer = { world: new THREE.Vector3(99, 99, 0), prev: new THREE.Vector3(99, 99, 0), inside: false, x: 0, y: 0 };
+  let hover = null, grab = null, down = null;
+  const toyAt = () => {
+    const found = ray.intersectObjects(toys.map((t) => t.holder), true)[0];
+    if (!found) return null;
+    let o = found.object;
+    while (o && !o.userData.id) o = o.parent;
+    return toys.find((t) => t.holder === o) || null;
+  };
+  const aim = (e) => {
+    const r = canvas.getBoundingClientRect();
+    pointer.x = e.clientX - r.left; pointer.y = e.clientY - r.top;
+    ndc.set((pointer.x / r.width) * 2 - 1, -(pointer.y / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, s.camera);
+    if (ray.ray.intersectPlane(plane, hit)) pointer.world.copy(hit);
+  };
+  const interacted = () => hint?.classList.add("gone");
+  canvas.addEventListener("pointermove", (e) => {
+    aim(e);
+    pointer.inside = true;
+    const t = grab || toyAt();
+    if (t !== hover) { hover = t; if (t) window.feel?.tick(); }
+    canvas.style.cursor = grab ? "grabbing" : hover ? "pointer" : "grab";
+    kick();
+  });
+  canvas.addEventListener("pointerleave", () => { pointer.inside = false; hover = null; pointer.world.set(99, 99, 0); kick(); });
+  canvas.addEventListener("pointerdown", (e) => {
+    aim(e);
+    interacted();
+    down = { x: e.clientX, y: e.clientY, at: performance.now(), toy: toyAt() };
+    grab = down.toy;
+    if (grab) { canvas.setPointerCapture(e.pointerId); window.feel?.tap(); }
+    kick();
+  });
+  const release = (e, cancelled) => {
+    if (!down) return;
+    const tap = !cancelled && down.toy && performance.now() - down.at < 320 && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 8;
+    if (tap) {
+      const target = document.getElementById(down.toy.id);
+      down.toy.v.z += 2.5;
+      buzz([10, 30, 16]);
+      if (target) target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    } else if (grab) {
+      grab.v.copy(pointer.world).sub(pointer.prev).multiplyScalar(40).clampLength(0, 9); // fling with the hand's last motion
+      buzz(6);
+    }
+    grab = null; down = null;
     kick();
   };
-  window.addEventListener("record:state", (event) => apply(event.detail));
-  if (window.recordState) apply(window.recordState); // the check may finish before Three.js has loaded
+  canvas.addEventListener("pointerup", (e) => release(e, false));
+  canvas.addEventListener("pointercancel", (e) => release(e, true));
+  new ResizeObserver(() => { fit(); kick(); }).observe(canvas);
+
+  let last = null;
+  const v3 = new THREE.Vector3();
+  const kick = runWhenVisible(canvas, (t) => {
+    const dt = Math.min(0.033, last === null ? 0.016 : t - last);
+    last = t;
+    let moving = false;
+    const handSpeed = pointer.world.distanceTo(pointer.prev) / dt;
+    for (const toy of toys) {
+      const p = toy.holder.position;
+      if (toy === grab) {
+        v3.copy(pointer.world).setZ(0.6);
+        toy.v.copy(v3).sub(p).multiplyScalar(14);
+      } else {
+        // Spring home, with damping; the pointer pushes toys away like a hand in water.
+        toy.v.addScaledVector(v3.copy(toy.home).sub(p), 16 * dt);
+        // Only a moving hand pushes, and never the toy under it, so a resting pointer can always tap.
+        if (pointer.inside && !grab && toy !== hover && handSpeed > 0.2) {
+          v3.copy(p).sub(pointer.world).setZ(0);
+          const d = v3.length();
+          if (d < 1.1 && d > 0.001) toy.v.addScaledVector(v3.normalize(), (1 - d / 1.1) * Math.min(1, handSpeed / 3) * 60 * dt);
+        }
+        toy.v.multiplyScalar(Math.exp(-4.2 * dt));
+      }
+      // Toys bump each other instead of overlapping.
+      for (const other of toys) {
+        if (other === toy) continue;
+        v3.copy(p).sub(other.holder.position);
+        const d = v3.length();
+        if (d < 0.95 && d > 0.001) toy.v.addScaledVector(v3.normalize(), (0.95 - d) * 30 * dt);
+      }
+      if (!reduceMotion) p.addScaledVector(toy.v, dt);
+      const speed = toy.v.length();
+      if (speed > 0.02) moving = true;
+      const target = toy === hover || toy === grab ? 1.18 : 1;
+      toy.scale += (target - toy.scale) * (reduceMotion ? 1 : 0.18);
+      toy.holder.scale.setScalar(toy.scale * (1 + Math.min(0.12, speed * 0.015)));
+      const g = toy.holder.children[0];
+      if (!reduceMotion) {
+        g.rotation.y += (toy.spin.y + toy.v.x * 1.2) * dt;
+        g.rotation.z = Math.sin(t * 0.8 + toy.phase) * 0.12 - toy.v.x * 0.08;
+        g.position.y = Math.sin(t * 1.1 + toy.phase) * 0.06;
+      }
+    }
+    if (hover) {
+      v3.copy(hover.holder.position).add(new THREE.Vector3(0, 0.45, 0)).project(s.camera);
+      tip.textContent = names[hover.id];
+      tip.style.left = `${((v3.x + 1) / 2) * canvas.clientWidth}px`;
+      tip.style.top = `${((1 - v3.y) / 2) * canvas.clientHeight}px`;
+      tip.classList.add("on");
+    } else tip.classList.remove("on");
+    pointer.prev.lerp(pointer.world, 0.5);
+    s.renderer.render(s.scene, s.camera);
+    return moving;
+  });
 }
 
 /* ---------- The order book as a landscape, from the same 700 real messages ---------- */
@@ -228,7 +298,7 @@ async function terrainScene(THREE) {
   const pos = geometry.attributes.position;
   const colors = new Float32Array(pos.count * 3);
   const low = new THREE.Color(css("--paper"));
-  const high = new THREE.Color(css("--proof"));
+  const high = new THREE.Color(css("--c-marketreplay"));
   const c = new THREE.Color();
   for (let r = 0; r < ROWS; r++) {
     for (let col = 0; col < COLS; col++) {
@@ -243,8 +313,14 @@ async function terrainScene(THREE) {
   geometry.computeVertexNormals();
   const surface = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ vertexColors: true, flatShading: true, roughness: 0.75, metalness: 0.05, side: THREE.DoubleSide }));
   const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), new THREE.LineBasicMaterial({ color: new THREE.Color(css("--ink")), transparent: true, opacity: 0.12 }));
+  // A glass sheet marks the message the panel beside it has replayed up to.
+  const scanMat = new THREE.MeshBasicMaterial({ color: css("--c-marketreplay"), transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false });
+  const scan = new THREE.Mesh(new THREE.PlaneGeometry(6.1, 1.3), scanMat);
+  scan.rotation.x = Math.PI / 2;
+  scan.position.set(0, 2.6, 0.62);
   const land = new THREE.Group();
-  land.add(surface, wire);
+  land.add(surface, wire, scan);
+  let scanY = 2.6;
   land.rotation.x = -Math.PI / 2.35;
   const spin = new THREE.Group();
   spin.add(land);
@@ -261,10 +337,17 @@ async function terrainScene(THREE) {
   }
   fit();
   const kick = runWhenVisible(canvas, (t) => {
+    scan.position.y += (scanY - scan.position.y) * (reduceMotion ? 1 : 0.2);
     spin.rotation.y = reduceMotion ? -0.35 : Math.sin(t * 0.18) * 0.55;
     renderer.render(scene, camera);
   });
   new ResizeObserver(() => { fit(); kick(); }).observe(canvas);
+  follow("book", (d) => {
+    scanY = 2.6 - 5.2 * Math.min(1, d.n / (ROWS * 10));
+    scanMat.color.set(d.error ? css("--refuse") : css("--c-marketreplay"));
+    scanMat.opacity = d.error ? 0.5 : d.n >= d.total ? 0 : 0.22; // only while replaying or scrubbing
+    kick();
+  });
 }
 
 /* ---------- Shared pieces for the signature scenes ---------- */
@@ -324,7 +407,7 @@ function balanceScene(THREE) {
     s.camera.position.set(0, 1.5, 7.4);
     s.camera.lookAt(0, 0.9, 0);
     const steel = metal(THREE, "#c3ccd8", 0.25);
-    const coin = metal(THREE, "#f2c14e", 0.16);
+    const coin = new THREE.MeshPhysicalMaterial({ color: css("--c-proofloom"), metalness: 0.45, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.08 });
     const add = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); s.scene.add(m); return m; };
     add(new THREE.CylinderGeometry(0.75, 0.9, 0.18, 48), steel, 0, 0.09, 0);
     add(new THREE.CylinderGeometry(0.07, 0.07, 2.2, 24), steel, 0, 1.25, 0);
@@ -363,10 +446,11 @@ function balanceScene(THREE) {
     let angle = 0, velocity = 0, target = 0, state = "running";
     let kick = () => {};
     follow("proofloom", (d) => {
+      const was = state;
       state = d.state;
-      // The books are short on the processor's side, so the left pan (what should be there) sinks.
-      target = d.state === "refused" ? 0.13 : 0;
-      if (d.state === "refused") velocity += 1.6; // the jolt of the refusal
+      // Short on the processor's side and the left pan (what should be there) sinks; over, and the right one does.
+      target = d.state === "refused" ? Math.max(-0.24, Math.min(0.24, 0.08 * Math.sign(d.diff) + (d.diff / 300) * 0.16)) : 0;
+      if (d.state !== was && d.state !== "running") velocity += d.state === "refused" ? 1.6 : -0.8; // the jolt of the verdict
       kick();
     });
     kick = animate(canvas, s, (t) => {
@@ -470,10 +554,10 @@ function ribbonsScene(THREE) {
       geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
       geo.setIndex(idx);
       geo.computeVertexNormals();
-      const color = name === best ? css("--proof") : name === "equal_weight" ? css("--ink") : "#9aa6b6";
-      const mesh = new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ color, metalness: 0.4, roughness: 0.35, side: THREE.DoubleSide, transparent: true, opacity: name === best ? 0.95 : name === "equal_weight" ? 0.6 : 0.5 }));
+      const color = css(["--c-risklab", "--ink", "--c-apex", "--c-proofloom", "--c-marketreplay", "--line-d"][rank]);
+      const mesh = new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ color, metalness: 0.3, roughness: 0.35, side: THREE.DoubleSide, transparent: true, opacity: name === best ? 0.95 : 0.6 }));
       s.scene.add(mesh);
-      return { mesh, count: idx.length };
+      return { name, mesh, count: idx.length, show: 1 };
     });
     // The ₹1 starting line, so the losses read as losses.
     const start = new THREE.Mesh(new THREE.PlaneGeometry(L, 1.6), new THREE.MeshBasicMaterial({ color: css("--proof"), transparent: true, opacity: 0.06, side: THREE.DoubleSide }));
@@ -481,25 +565,32 @@ function ribbonsScene(THREE) {
     start.position.y = 1.5;
     s.scene.add(start);
     let t0 = null;
-    animate(canvas, s, (t) => {
+    let hidden = [];
+    const kick = animate(canvas, s, (t) => {
       t0 ??= t;
       const p = reduceMotion ? 1 : Math.min(1, (t - t0) / 3.2);
-      walls.forEach((w) => w.mesh.geometry.setDrawRange(0, Math.floor((w.count / 6) * p) * 6));
+      walls.forEach((w) => {
+        w.mesh.geometry.setDrawRange(0, Math.floor((w.count / 6) * p) * 6);
+        w.show += ((hidden.includes(w.name) ? 0 : 1) - w.show) * (reduceMotion ? 1 : 0.15);
+        w.mesh.scale.y = Math.max(0.001, w.show);
+        w.mesh.visible = w.show > 0.01;
+      });
       s.scene.rotation.y = reduceMotion ? 0 : Math.sin(t * 0.2) * 0.18;
     });
+    follow("risk", (d) => { hidden = d.hidden; kick(); });
   });
 }
 
-/* ---------- DATA301: the error surface, with gradient descent rolling down it ---------- */
+/* ---------- DATA301: the error surface for the visitor's points, with gradient descent rolling down it ---------- */
 
 function bowlScene(THREE) {
   const canvas = document.querySelector('[data-sig="data301"] canvas');
   if (!canvas) return;
   whenNear(canvas, async () => {
-    // The same 36 points as the 2D lab (same seed and generator), so the ball follows the same path.
+    // Starts from the same 36 points as the 2D lab (same seed and generator); then follows whatever the visitor does there.
     let seed = 301;
     const rand = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
-    const pts = Array.from({ length: 36 }, () => { const px = rand(); return [px, 0.18 + 0.62 * px + (rand() - 0.5) * 0.22]; });
+    let pts = Array.from({ length: 36 }, () => { const px = rand(); return [px, 0.18 + 0.62 * px + (rand() - 0.5) * 0.22]; });
     const loss = (w, b) => pts.reduce((sum, [px, py]) => sum + (w * px + b - py) ** 2, 0) / pts.length;
     const W = [-0.9, 1.6], B = [-0.45, 1.25], SIZE = 4.4;
     const toX = (w) => ((w - W[0]) / (W[1] - W[0]) - 0.5) * SIZE;
@@ -509,50 +600,64 @@ function bowlScene(THREE) {
     const s = await stage(THREE, canvas, 32);
     s.camera.position.set(4.6, 3.0, 5.2);
     s.camera.lookAt(0, 0.12, 0);
-    const SEG = 64;
+    const SEG = 48;
     const geo = new THREE.PlaneGeometry(SIZE, SIZE, SEG, SEG);
     geo.rotateX(-Math.PI / 2);
     const pos = geo.attributes.position;
     const colors = new Float32Array(pos.count * 3);
-    const low = new THREE.Color(css("--proof")), high = new THREE.Color(css("--paper"));
-    const c = new THREE.Color();
-    let maxH = 0;
-    const hs = [];
-    for (let i = 0; i < pos.count; i++) {
-      const w = W[0] + (pos.getX(i) / SIZE + 0.5) * (W[1] - W[0]);
-      const b = B[0] + (pos.getZ(i) / SIZE + 0.5) * (B[1] - B[0]);
-      const h = height(w, b);
-      hs.push(h); maxH = Math.max(maxH, h);
-      pos.setY(i, h);
-    }
-    hs.forEach((h, i) => { c.copy(low).lerp(high, Math.min(1, h / maxH)); colors.set([c.r, c.g, c.b], i * 3); });
     geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    geo.computeVertexNormals();
-    s.scene.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.6, metalness: 0.05 })));
-    s.scene.add(new THREE.LineSegments(new THREE.WireframeGeometry(geo), new THREE.LineBasicMaterial({ color: css("--ink"), transparent: true, opacity: 0.06 })));
-    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.12, 32, 16), metal(THREE, "#d9a93a", 0.2));
+    const low = new THREE.Color(css("--c-data301")), high = new THREE.Color(css("--paper"));
+    const c = new THREE.Color();
+    const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo), new THREE.LineBasicMaterial({ color: css("--ink"), transparent: true, opacity: 0.06 }));
+    function reshape() {
+      let maxH = 0;
+      const hs = [];
+      for (let i = 0; i < pos.count; i++) {
+        const w = W[0] + (pos.getX(i) / SIZE + 0.5) * (W[1] - W[0]);
+        const b = B[0] + (pos.getZ(i) / SIZE + 0.5) * (B[1] - B[0]);
+        const h = height(w, b);
+        hs.push(h); maxH = Math.max(maxH, h);
+        pos.setY(i, h);
+      }
+      hs.forEach((h, i) => { c.copy(low).lerp(high, Math.min(1, h / maxH)); colors.set([c.r, c.g, c.b], i * 3); });
+      pos.needsUpdate = true;
+      geo.attributes.color.needsUpdate = true;
+      geo.computeVertexNormals();
+      wire.geometry.dispose();
+      wire.geometry = new THREE.WireframeGeometry(geo);
+    }
+    reshape();
+    s.scene.add(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55, metalness: 0.05 })), wire);
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.12, 32, 16), metal(THREE, "#e8edf3", 0.15));
     s.scene.add(ball);
     const trail = [];
     const trailLine = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: css("--ink") }));
     s.scene.add(trailLine);
-    const place = (w, b, step) => {
+    let kick = () => {};
+    let version = 0, dirty = false, last = { w: -0.4, b: 0.85, step: 0 };
+    const place = ({ w, b, step }) => {
       if (step === 0) trail.length = 0;
       const p = new THREE.Vector3(toX(w), height(w, b) + 0.12, toZ(b));
       ball.position.copy(p);
       trail.push(p.clone().setY(p.y - 0.06));
+      if (trail.length > 400) trail.shift();
       trailLine.geometry.setFromPoints(trail);
-      kick?.();
     };
-    let kick = null;
-    place(-0.4, 0.85, 0);
-    follow("gd", (d) => place(d.w, d.b, d.step));
+    place(last);
+    follow("gd", (d) => {
+      if (d.version !== version) { version = d.version; pts = d.pts.map((p) => [...p]); dirty = true; trail.length = 0; }
+      last = d;
+      kick();
+    });
     kick = animate(canvas, s, (t) => {
+      if (dirty) { dirty = false; reshape(); } // at most once a frame, however fast the visitor drags
+      place(last);
       s.scene.rotation.y = reduceMotion ? 0 : Math.sin(t * 0.22) * 0.25;
     });
   });
 }
 
-/* ---------- Apex: 120 production runs regrouping into Apex's own PCA view ---------- */
+/* ---------- Apex: 120 production runs regrouping into Apex's own PCA view. Drag to spin ---------- */
 
 function apexScenes(THREE) {
   document.querySelectorAll("canvas[data-apex3d]").forEach((canvas) => whenNear(canvas, async () => {
@@ -563,30 +668,50 @@ function apexScenes(THREE) {
     s.camera.lookAt(0, -0.1, 0);
     const n = data.points.length;
     // The percentages beside the cloud come from the same file it draws, so they can never disagree.
-    const dds = canvas.closest(".demo")?.querySelectorAll(".counters dd");
+    const demo = canvas.closest(".demo");
+    const dds = demo?.querySelectorAll(".counters dd");
     if (dds?.length >= 2) { dds[0].textContent = `${(data.exp[0] * 100).toFixed(1)}%`; dds[1].textContent = `${(data.exp[1] * 100).toFixed(1)}%`; }
     const reach = (pick) => Math.max(...data.points.flatMap(pick).map(Math.abs)) || 1;
     const sScale = 1.9 / reach((p) => p.s), pScale = 2.2 / reach((p) => p.p);
-    const lineColor = { A: css("--proof"), B: "#d9a93a", C: css("--ink"), D: "#8f9bab" };
+    const lineColor = { A: css("--line-a"), B: css("--line-b"), C: css("--line-c"), D: css("--line-d") };
     const dots = new THREE.InstancedMesh(new THREE.SphereGeometry(0.075, 20, 12), new THREE.MeshPhysicalMaterial({ metalness: 0.2, roughness: 0.3, clearcoat: 0.6 }), n);
     data.points.forEach((p, i) => dots.setColorAt(i, new THREE.Color(lineColor[p.line] || lineColor.D)));
-    s.scene.add(dots);
+    const cloud = new THREE.Group();
+    cloud.add(dots);
+    s.scene.add(cloud);
     // Faint cube for the raw measurements, faint plane for the PCA view; each fades in with its phase.
     const cube = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(3.8, 3.8, 3.8)), new THREE.LineBasicMaterial({ color: css("--muted"), transparent: true, opacity: 0.25 }));
-    const plane = new THREE.GridHelper(4.8, 12, css("--proof"), css("--proof"));
+    const plane = new THREE.GridHelper(4.8, 12, css("--c-apex"), css("--c-apex"));
     plane.material.transparent = true;
     plane.material.opacity = 0;
-    s.scene.add(cube, plane);
+    cloud.add(cube, plane);
     const m = new THREE.Matrix4(), v = new THREE.Vector3();
     const ease = (x) => x * x * (3 - 2 * x);
-    let t0 = null;
-    const button = canvas.closest(".demo")?.querySelector(".replay");
-    if (button) button.addEventListener("click", () => { t0 = null; buzz(8); kick(); });
-    // One cycle: hold the raw view, glide into PCA, hold, glide back.
+    let t0 = null, mode = null, k = 0;
+    const say = (view) => window.dispatchEvent(new CustomEvent("demo:apexview", { detail: view }));
+    const button = demo?.querySelector(".replay");
+    if (button) button.addEventListener("click", () => { t0 = null; mode = null; say(null); window.feel?.tap(); kick(); });
+    follow("apexpca", (d) => { mode = d.view; kick(); });
+    // Drag to spin, with a little inertia; a vertical drag tilts within limits.
+    let yaw = 0.5, pitch = 0, vy = 0, drag = null, auto = true;
+    canvas.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY }; auto = false; canvas.setPointerCapture(e.pointerId); window.feel?.tick(); kick(); });
+    canvas.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      vy = (e.clientX - drag.x) * 0.01;
+      yaw += vy;
+      pitch = Math.max(-0.5, Math.min(0.6, pitch + (e.clientY - drag.y) * 0.006));
+      drag = { x: e.clientX, y: e.clientY };
+      kick();
+    });
+    const up = () => { drag = null; };
+    canvas.addEventListener("pointerup", up);
+    canvas.addEventListener("pointercancel", up);
+    // One cycle when left alone: hold the raw view, glide into PCA, hold, glide back.
     const phase = (u) => (u < 2.5 ? 0 : u < 4.5 ? ease((u - 2.5) / 2) : u < 8 ? 1 : u < 10 ? 1 - ease((u - 8) / 2) : 0);
     const kick = animate(canvas, s, (t) => {
       t0 ??= t;
-      const k = reduceMotion ? 1 : phase((t - t0) % 10.5);
+      const goal = mode === "raw" ? 0 : mode === "pca" ? 1 : phase((t - t0) % 10.5);
+      k = reduceMotion ? goal : mode ? k + (goal - k) * 0.08 : goal;
       data.points.forEach((p, i) => {
         const a = [p.s[0] * sScale, p.s[1] * sScale, p.s[2] * sScale];
         const b = [p.p[0] * pScale, 0, p.p[1] * pScale];
@@ -595,8 +720,10 @@ function apexScenes(THREE) {
       });
       dots.instanceMatrix.needsUpdate = true;
       cube.material.opacity = 0.25 * (1 - k);
-      plane.material.opacity = 0.22 * k;
-      s.scene.rotation.y = reduceMotion ? 0.5 : 0.5 + Math.sin(t * 0.2) * 0.35;
+      plane.material.opacity = 0.3 * k;
+      if (!drag) { yaw += vy; vy *= 0.94; }
+      if (auto && !reduceMotion) yaw = 0.5 + Math.sin(t * 0.2) * 0.35;
+      cloud.rotation.set(pitch, yaw, 0);
     });
   }));
 }
@@ -608,7 +735,7 @@ if (!hasWebGL()) {
 } else {
   import("three")
     .then((THREE) => {
-      chainScene(THREE);
+      toysScene(THREE);
       terrainScene(THREE);
       balanceScene(THREE);
       ringsScene(THREE);

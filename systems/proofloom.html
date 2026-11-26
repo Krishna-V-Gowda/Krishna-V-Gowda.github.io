@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Proofloom — Krishna V. Gowda</title>
   <meta name="description" content="A verification-first settlement close in which AI ranks damaged evidence while deterministic financial controls and explicit human authority retain the right to close.">
-  <meta name="theme-color" content="#edf1f5" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#eef0f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111218" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Krishna V. Gowda">
   <meta property="og:title" content="Proofloom — Krishna V. Gowda">
@@ -20,7 +20,7 @@
   <link rel="canonical" href="https://krishna-v-gowda.github.io/systems/proofloom.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="/assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
@@ -43,7 +43,7 @@
   </nav>
 </header>
 
-<main id="case" class="case">
+<main id="case" class="case" style="--acc: var(--c-proofloom)">
   <section class="case-hero" aria-labelledby="case-title">
     <a class="back" href="/#systems">All work</a>
     <h1 id="case-title">Proofloom</h1>
@@ -64,12 +64,17 @@
           <div class="ledger-row"><span>Processor reports</span><span class="num" data-k="reported"></span></div>
           <div class="ledger-row diff"><span>Difference</span><span class="num" data-k="diff"></span></div>
         </div>
+        <div class="control">
+          <label for="pl-reported">Pretend you&rsquo;re the processor: change what you report</label>
+          <input type="range" id="pl-reported" data-k="slider" step="1" disabled>
+          <div class="control-row"><button type="button" class="chip" data-k="match">Report the exact amount</button><button type="button" class="chip" data-k="real">Back to the real report</button></div>
+        </div>
         <p class="verdict" data-k="verdict" aria-live="polite"></p>
       </div>
     
     <figure class="sig" data-sig="proofloom">
           <canvas aria-hidden="true"></canvas>
-          <figcaption class="fine">Expected settlement on one pan, the processor&rsquo;s report on the other. When the close is refused, the beam drops and stays down.</figcaption>
+          <figcaption class="fine">Expected settlement on one pan, the processor&rsquo;s report on the other. Move the slider and the beam follows.</figcaption>
         </figure>
   </section>
 

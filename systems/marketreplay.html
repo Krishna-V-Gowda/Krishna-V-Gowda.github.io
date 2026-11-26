@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>MarketReplay — Krishna V. Gowda</title>
   <meta name="description" content="A C++20 event-replay engine for a bounded TotalView-ITCH subset, with explicit state transitions and an independently implemented Python oracle.">
-  <meta name="theme-color" content="#edf1f5" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#eef0f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111218" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Krishna V. Gowda">
   <meta property="og:title" content="MarketReplay — Krishna V. Gowda">
@@ -20,7 +20,7 @@
   <link rel="canonical" href="https://krishna-v-gowda.github.io/systems/marketreplay.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="/assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
@@ -43,7 +43,7 @@
   </nav>
 </header>
 
-<main id="case" class="case">
+<main id="case" class="case" style="--acc: var(--c-marketreplay)">
   <section class="case-hero" aria-labelledby="case-title">
     <a class="back" href="/#systems">All work</a>
     <h1 id="case-title">MarketReplay</h1>
@@ -54,14 +54,19 @@
 
   <section class="case-demo" aria-label="Live proof">
     <div class="demo" data-demo="book">
-        <div class="demo-bar"><span>Replaying 700 real messages from the test fixture</span><button type="button" class="replay">Replay</button></div>
+        <div class="demo-bar"><span>700 real messages from the test fixture</span><button type="button" class="replay">Replay</button></div>
         <div class="book-wrap"><canvas class="book" width="640" height="300" aria-label="Order book depth by price level"></canvas></div>
         <dl class="counters">
-          <div><dt>Messages</dt><dd data-k="msgs">0</dd></div>
+          <div><dt>Message</dt><dd data-k="msgs">0</dd></div>
           <div><dt>Resting orders</dt><dd data-k="orders">0</dd></div>
           <div><dt>Invariant checks</dt><dd data-k="checks">0</dd></div>
         </dl>
-        <p class="fine">The largest price levels, buy and sell. After every message, the shares on each level must equal the sum of the orders resting there; one mismatch would stop the replay. Prices come from the project's synthetic test fixture.</p>
+        <div class="control">
+          <label for="mr-scrub">Scrub through the feed</label>
+          <input type="range" id="mr-scrub" data-k="scrub" min="0" max="700" value="0" step="1">
+          <div class="control-row"><button type="button" class="chip warn" data-k="corrupt">Corrupt the next message</button></div>
+        </div>
+        <p class="fine" data-k="note">The largest price levels, buy and sell. After every message, the shares on each level must equal the sum of the orders resting there. Prices come from the project&rsquo;s synthetic test fixture.</p>
       </div>
     <figure class="terrain">
           <canvas aria-hidden="true"></canvas>

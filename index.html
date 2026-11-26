@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Krishna V. Gowda — systems that prove they're right</title>
-  <meta name="description" content="Krishna V. Gowda builds software that can prove its own results: settlement controls, market-data replay, analytics verification, quantitative research and machine-learning labs. Co-founder and CTO of KRIVANCE.">
-  <meta name="theme-color" content="#edf1f5" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Krishna V. Gowda builds software that can prove its own results: settlement controls, market-data replay, analytics verification, quantitative research, machine-learning labs and an HR decision engine. Co-founder and CTO of KRIVANCE.">
+  <meta name="theme-color" content="#eef0f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111218" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Krishna V. Gowda">
   <meta property="og:title" content="Krishna V. Gowda — systems that prove they're right">
-  <meta property="og:description" content="Every claim on this page is checked live, in your browser.">
+  <meta property="og:description" content="Every claim on this page is checked live, in your browser. Try to break it.">
   <meta property="og:url" content="https://krishna-v-gowda.github.io/">
   <meta property="og:image" content="https://krishna-v-gowda.github.io/assets/social-preview.png">
   <meta property="og:image:width" content="1200">
@@ -20,7 +20,7 @@
   <link rel="canonical" href="https://krishna-v-gowda.github.io/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
@@ -38,49 +38,56 @@
   <a class="name" href="#top">Krishna V. Gowda</a>
   <nav aria-label="Sections">
     <a href="#systems">Work</a>
-    <a href="#krivance">KRIVANCE</a>
+    <a href="#record">Break it</a>
     <a href="#method">About</a>
     <a href="https://github.com/Krishna-V-Gowda">GitHub</a>
+    <button type="button" class="sound" id="sound" aria-pressed="false">Sound off</button>
   </nav>
 </header>
 
 <main id="top">
   <section class="hero" aria-labelledby="hero-title">
-    <div class="chain3d" aria-hidden="true"><canvas></canvas></div>
     <div class="hero-copy">
-      <h1 id="hero-title">I build systems that prove they're right.</h1>
-      <p class="lede">Settlement controls that refuse a ₹1.37 mismatch. A market-data replay checked against a second, independent implementation. A forecasting record anyone can verify against Bitcoin. I'm a computer science student in Bengaluru and the co-founder and CTO of <a href="https://krivance.com/">KRIVANCE</a>.</p>
+      <p class="hello">Hi, I&rsquo;m Krishna.</p>
+      <h1 id="hero-title" class="play-type">I build systems that prove they&rsquo;re right.</h1>
+      <p class="lede">Settlement controls that refuse a ₹1.37 mismatch. A market-data replay checked against a second, independent implementation. A forecasting record anyone can verify against Bitcoin. I study computer science in Bengaluru and I&rsquo;m the co-founder and CTO of <a href="https://krivance.com/">KRIVANCE</a>.</p>
       <div class="actions">
-        <a class="btn btn-solid" href="#systems">See the work</a>
-        <a class="btn" href="mailto:kris7090779999@gmail.com">Email me</a>
+        <a class="btn btn-solid" href="#systems">Play with the work</a>
+        <a class="btn" href="#record">Try to break it</a>
       </div>
-      <p class="hero-note">The record panel on this page is not an animation of a proof. It is one. Your browser is checking every hash and signature in KRIVANCE's public forecast record right now.</p>
     </div>
+    <div class="toys">
+      <canvas aria-hidden="true"></canvas>
+      <p class="toys-hint" aria-hidden="true">Push them around. Tap one to jump to it.</p>
+      <p class="toys-label" aria-hidden="true"></p>
+    </div>
+  </section>
 
-    <figure class="chain-panel" aria-labelledby="chain-caption">
-      <div class="chain-head">
-        <span id="chain-caption">KRIVANCE Record, checked in your browser</span>
-        <span class="chain-status" id="chain-status" role="status" aria-live="polite">Checking…</span>
+  <section id="record" class="record" aria-labelledby="record-title">
+    <div class="record-copy">
+      <h2 id="record-title">Don&rsquo;t trust me. Try to break it.</h2>
+      <p>KRIVANCE seals every forecast before the outcome exists, signs it and links it to the one before, like pages in a bound ledger. Your browser is checking all seventeen right now.</p>
+      <p><strong>Then tap any page to tamper with it.</strong> Change one character and watch what happens.</p>
+      <p class="links"><a href="https://krivance.com/record">See the live record</a></p>
+    </div>
+    <div class="board" data-demo="record">
+      <div class="board-head">
+        <span class="board-status" id="chain-status" role="status" aria-live="polite">Checking…</span>
+        <button type="button" class="chip" id="record-undo" hidden>Undo my tampering</button>
       </div>
-      <ol class="chain" id="chain" aria-label="Record entries"></ol>
-      <div class="chain-foot">
-        <p class="anchor" id="chain-anchor"></p>
-        <div class="chain-actions">
-          <button type="button" class="btn btn-small" id="tamper">Tamper with entry 7</button>
-          <a class="text-link" href="https://krivance.com/record">Live record</a>
-        </div>
-      </div>
-      <figcaption class="fine" id="chain-fine">Copy of the record taken 26 November 2026. The live version keeps growing at krivance.com/record.</figcaption>
-    </figure>
+      <ol class="tiles" id="tiles" aria-label="Sealed forecasts"></ol>
+      <div class="tile-detail" id="tile-detail" aria-live="polite"></div>
+      <p class="fine" id="chain-fine">A copy of the record taken 26 November 2026; the live one keeps growing at krivance.com/record.</p>
+    </div>
   </section>
 
   <section id="systems" class="work" aria-labelledby="work-title">
     <div class="section-intro">
-      <h2 id="work-title">Six systems. Each one shows its working.</h2>
-      <p>Every panel below runs on the project's real data, taken from its repository. Press replay on any of them.</p>
+      <h2 id="work-title">Seven systems. Don&rsquo;t just watch them, play with them.</h2>
+      <p>Every panel runs on the project&rsquo;s real data, taken from its repository. Drag, type, scrub and break things.</p>
     </div>
 
-    <article class="system" id="proofloom" aria-labelledby="proofloom-title">
+    <article class="system" id="proofloom" style="--acc: var(--c-proofloom)" aria-labelledby="proofloom-title">
       <div class="system-copy">
         <h3 id="proofloom-title">Proofloom</h3>
         <p class="what">A settlement close for payments. A model ranks messy evidence, but fixed money rules and a human reviewer decide whether the books can close.</p>
@@ -89,7 +96,7 @@
         <p class="links"><a href="systems/proofloom.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/proofloom">Source</a></p>
         <figure class="sig" data-sig="proofloom">
           <canvas aria-hidden="true"></canvas>
-          <figcaption class="fine">Expected settlement on one pan, the processor&rsquo;s report on the other. When the close is refused, the beam drops and stays down.</figcaption>
+          <figcaption class="fine">Expected settlement on one pan, the processor&rsquo;s report on the other. Move the slider and the beam follows.</figcaption>
         </figure>
       </div>
       <div class="demo" data-demo="proofloom">
@@ -103,14 +110,19 @@
           <div class="ledger-row"><span>Processor reports</span><span class="num" data-k="reported"></span></div>
           <div class="ledger-row diff"><span>Difference</span><span class="num" data-k="diff"></span></div>
         </div>
+        <div class="control">
+          <label for="pl-reported">Pretend you&rsquo;re the processor: change what you report</label>
+          <input type="range" id="pl-reported" data-k="slider" step="1" disabled>
+          <div class="control-row"><button type="button" class="chip" data-k="match">Report the exact amount</button><button type="button" class="chip" data-k="real">Back to the real report</button></div>
+        </div>
         <p class="verdict" data-k="verdict" aria-live="polite"></p>
       </div>
     </article>
 
-    <article class="system" id="marketreplay" aria-labelledby="marketreplay-title">
+    <article class="system" id="marketreplay" style="--acc: var(--c-marketreplay)" aria-labelledby="marketreplay-title">
       <div class="system-copy">
         <h3 id="marketreplay-title">MarketReplay</h3>
-        <p class="what">A C++20 engine that rebuilds a stock exchange's order book from its binary message feed (Nasdaq TotalView-ITCH), one message at a time.</p>
+        <p class="what">A C++20 engine that rebuilds a stock exchange&rsquo;s order book from its binary message feed (Nasdaq TotalView-ITCH), one message at a time.</p>
         <p class="proof">A separate Python implementation replays the same feed. Both must end in exactly the same state, byte for byte, across 500,000 messages.</p>
         <p class="limits">A bounded subset of ITCH. Not a live trading system.</p>
         <p class="links"><a href="systems/marketreplay.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/MarketReplay">Source</a></p>
@@ -120,24 +132,29 @@
         </figure>
       </div>
       <div class="demo" data-demo="book">
-        <div class="demo-bar"><span>Replaying 700 real messages from the test fixture</span><button type="button" class="replay">Replay</button></div>
+        <div class="demo-bar"><span>700 real messages from the test fixture</span><button type="button" class="replay">Replay</button></div>
         <div class="book-wrap"><canvas class="book" width="640" height="300" aria-label="Order book depth by price level"></canvas></div>
         <dl class="counters">
-          <div><dt>Messages</dt><dd data-k="msgs">0</dd></div>
+          <div><dt>Message</dt><dd data-k="msgs">0</dd></div>
           <div><dt>Resting orders</dt><dd data-k="orders">0</dd></div>
           <div><dt>Invariant checks</dt><dd data-k="checks">0</dd></div>
         </dl>
-        <p class="fine">The largest price levels, buy and sell. After every message, the shares on each level must equal the sum of the orders resting there; one mismatch would stop the replay. Prices come from the project's synthetic test fixture.</p>
+        <div class="control">
+          <label for="mr-scrub">Scrub through the feed</label>
+          <input type="range" id="mr-scrub" data-k="scrub" min="0" max="700" value="0" step="1">
+          <div class="control-row"><button type="button" class="chip warn" data-k="corrupt">Corrupt the next message</button></div>
+        </div>
+        <p class="fine" data-k="note">The largest price levels, buy and sell. After every message, the shares on each level must equal the sum of the orders resting there. Prices come from the project&rsquo;s synthetic test fixture.</p>
       </div>
     </article>
 
-    <article class="system" id="trustbench" aria-labelledby="trustbench-title">
+    <article class="system" id="trustbench" style="--acc: var(--c-trustbench)" aria-labelledby="trustbench-title">
       <div class="system-copy">
-        <h3 id="trustbench-title">TrustBench and Apex</h3>
-        <p class="what">Apex is a data-exploration app that runs in the browser. TrustBench takes the exact code Apex ships and checks its statistics against independent reference libraries.</p>
-        <p class="proof">The first run passed 7 of 16 checks. After the fixes, 15 of 16. TrustBench recorded the fingerprint of the fixed code, and this panel checks that the live app still matches it.</p>
+        <h3 id="trustbench-title">TrustBench</h3>
+        <p class="what">TrustBench takes the exact code an analytics app ships and checks its statistics against independent reference libraries.</p>
+        <p class="proof">Its first subject, Apex, passed 7 of 16 checks. After the fixes, 15 of 16. TrustBench recorded the fixed code&rsquo;s fingerprint, and this panel checks that the live app still matches it.</p>
         <p class="limits">Checks one documented Apex release, not any analytics tool.</p>
-        <p class="links"><a href="systems/trustbench.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/TrustBench">TrustBench</a><a href="https://krishna-v-gowda.github.io/EDA-InsightLab-Apex/">Open Apex</a></p>
+        <p class="links"><a href="systems/trustbench.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/TrustBench">Source</a></p>
         <figure class="sig" data-sig="trustbench">
           <canvas aria-hidden="true"></canvas>
           <figcaption class="fine">Each bar is one byte of a fingerprint. The inner ring is what TrustBench recorded; the outer ring settles onto the live app&rsquo;s bytes once your browser has hashed it.</figcaption>
@@ -149,15 +166,17 @@
           <div class="bar-row"><span>Before the fix</span><div class="bar"><i data-k="before"></i></div><span class="num">7 / 16</span></div>
           <div class="bar-row"><span>After the fix</span><div class="bar"><i data-k="after"></i></div><span class="num">15 / 16</span></div>
         </div>
-        <div class="hashes">
-          <div><span>Fingerprint TrustBench recorded</span><code>51a9853d2a465a71197a28e71d16821d69b3cbbebf6c1bdc753563c12a3688df</code></div>
-          <div><span>Fingerprint of the app online now</span><code data-k="live">…</code></div>
-        </div>
         <p class="verdict" data-k="verdict" aria-live="polite"></p>
+        <div class="control">
+          <label for="tb-text">Why a match means anything: type here and watch the fingerprint</label>
+          <input type="text" id="tb-text" data-k="text" value="Krishna" autocomplete="off" spellcheck="false">
+          <div class="hexgrid" data-k="hex" aria-hidden="true"></div>
+          <p class="fine" data-k="changed">Change one letter and about half the fingerprint changes. So when the live app&rsquo;s fingerprint matches, the code is identical, byte for byte.</p>
+        </div>
       </div>
     </article>
 
-    <article class="system" id="apex" aria-labelledby="apex-title">
+    <article class="system" id="apex" style="--acc: var(--c-apex)" aria-labelledby="apex-title">
       <div class="system-copy">
         <h3 id="apex-title">EDA InsightLab Apex</h3>
         <p class="what">A data-exploration app that runs entirely in your browser: profiling, cleaning, feature engineering and principal-component analysis, with nothing uploaded anywhere.</p>
@@ -166,19 +185,23 @@
         <p class="links"><a href="systems/apex.html">Case study</a><a href="https://krishna-v-gowda.github.io/EDA-InsightLab-Apex/">Open Apex</a><a href="https://github.com/Krishna-V-Gowda/EDA-InsightLab-Apex">Source</a></p>
       </div>
       <div class="demo" data-demo="apexpca">
-        <div class="demo-bar"><span>Apex&rsquo;s PCA on 120 production runs</span><button type="button" class="replay">Replay</button></div>
+        <div class="demo-bar"><span>Apex&rsquo;s PCA on 120 production runs. Drag to spin it.</span><button type="button" class="replay">Replay</button></div>
         <canvas class="apex3d" data-apex3d aria-label="120 production runs moving from three raw measurements into Apex's principal-component view"></canvas>
+        <div class="control-row toggle" role="group" aria-label="View">
+          <button type="button" class="chip" data-view="raw" aria-pressed="false">Raw measurements</button>
+          <button type="button" class="chip" data-view="pca" aria-pressed="false">Apex&rsquo;s PCA view</button>
+        </div>
         <dl class="counters">
           <div><dt>First component</dt><dd>31.3%</dd></div>
           <div><dt>Second component</dt><dd>18.8%</dd></div>
           <div><dt>Reference library</dt><dd>Agrees</dd></div>
         </dl>
-        <ul class="legend apex-legend"><li><i style="background:var(--proof)"></i>Line A</li><li><i style="background:#d9a93a"></i>Line B</li><li><i style="background:var(--ink)"></i>Line C</li><li><i style="background:#8f9bab"></i>Line D</li></ul>
+        <ul class="legend apex-legend"><li><i style="background:var(--line-a)"></i>Line A</li><li><i style="background:var(--line-b)"></i>Line B</li><li><i style="background:var(--line-c)"></i>Line C</li><li><i style="background:var(--line-d)"></i>Line D</li></ul>
         <p class="fine">Each dot is one production run. It starts at three of its raw measurements (temperature, pressure and line speed), then moves to where Apex&rsquo;s PCA places it using all seven. The percentages are the share of the variation each component captures.</p>
       </div>
     </article>
 
-    <article class="system" id="risklab" aria-labelledby="risklab-title">
+    <article class="system" id="risklab" style="--acc: var(--c-risklab)" aria-labelledby="risklab-title">
       <div class="system-copy">
         <h3 id="risklab-title">RiskLab</h3>
         <p class="what">A research lab for one question: which ways of splitting money across assets still hold up when estimates are noisy, markets change mood and trading costs money?</p>
@@ -187,35 +210,52 @@
         <p class="links"><a href="systems/risklab.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/RiskLab">Source</a></p>
         <figure class="sig" data-sig="risklab">
           <canvas aria-hidden="true"></canvas>
-          <figcaption class="fine">The same six wealth paths as walls in depth: the lowest in front, the best (blue) at the back. The pale plane is the ₹1 they started with.</figcaption>
+          <figcaption class="fine">The same six wealth paths as walls in depth: the lowest in front, the best at the back. The pale plane is the ₹1 they started with.</figcaption>
         </figure>
       </div>
       <div class="demo" data-demo="risk">
-        <div class="demo-bar"><span>₹1 invested in each method, day by day</span><button type="button" class="replay">Replay</button></div>
+        <div class="demo-bar"><span>₹1 in each method. Run your finger along it.</span><button type="button" class="replay">Replay</button></div>
         <svg class="risk" viewBox="0 0 640 300" role="img" aria-label="Wealth of six allocation methods over the simulated period"></svg>
-        <ul class="legend" data-k="legend"></ul>
+        <ul class="legend toggles" data-k="legend"></ul>
+        <p class="fine" data-k="readout">Tap a method to hide or show it.</p>
       </div>
     </article>
 
-    <article class="system" id="data301" aria-labelledby="data301-title">
+    <article class="system" id="data301" style="--acc: var(--c-data301)" aria-labelledby="data301-title">
       <div class="system-copy">
         <h3 id="data301-title">DATA301 ML Studio</h3>
         <p class="what">The course platform for machine learning at Vidyashilp University: twelve interactive labs where students change a setting and watch the model respond.</p>
-        <p class="proof">Each lab's maths is a small, separate module with its own tests, so what students see is the algorithm, not the interface around it.</p>
+        <p class="proof">Each lab&rsquo;s maths is a small, separate module with its own tests, so what students see is the algorithm, not the interface around it.</p>
         <p class="limits">Teaching-scale models in two dimensions.</p>
         <p class="links"><a href="systems/data301.html">Case study</a><a href="https://data301-ml-studio.vercel.app/">Open the studio</a></p>
         <figure class="sig" data-sig="data301">
           <canvas aria-hidden="true"></canvas>
-          <figcaption class="fine">The real error surface for the lab&rsquo;s points. The ball is gradient descent, moving step for step with the panel.</figcaption>
+          <figcaption class="fine">The error surface for the points on the right. The ball is gradient descent; drag a point and the whole surface reshapes.</figcaption>
         </figure>
       </div>
       <div class="demo" data-demo="gd">
-        <div class="demo-bar"><span>Gradient descent fitting a line, like the studio's first lab</span><button type="button" class="replay">Replay</button></div>
-        <canvas class="gd" width="640" height="300" aria-label="A line being fitted to points by gradient descent"></canvas>
+        <div class="demo-bar"><span>Drag the points. Tap empty space to add one.</span><button type="button" class="replay">Reset points</button></div>
+        <canvas class="gd" width="640" height="300" aria-label="Points and a fitted line. Drag points to move them; the line refits by gradient descent."></canvas>
         <dl class="counters">
           <div><dt>Step</dt><dd data-k="step">0</dd></div>
           <div><dt>Error</dt><dd data-k="loss">–</dd></div>
+          <div><dt>Points</dt><dd data-k="count">36</dd></div>
         </dl>
+      </div>
+    </article>
+
+    <article class="system" id="dayflow" style="--acc: var(--c-dayflow)" aria-labelledby="dayflow-title">
+      <div class="system-copy">
+        <h3 id="dayflow-title">Dayflow</h3>
+        <p class="what">An HR system that shows the consequences of a decision before anyone makes it: approve this leave, and here is what happens to the team.</p>
+        <p class="proof">The panel runs Dayflow&rsquo;s own decision rules: team coverage, overlapping requests, and a risk call that turns cautious below 80% coverage and flags high risk below 60%.</p>
+        <p class="limits">A sample team. The rules are Dayflow&rsquo;s; the people are illustrative.</p>
+        <p class="links"><a href="systems/dayflow.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/dayflow-hrms">Source</a></p>
+      </div>
+      <div class="demo" data-demo="dayflow">
+        <div class="demo-bar"><span>Engineering, the next two weeks. Tap a day to request leave.</span><button type="button" class="replay">Reset</button></div>
+        <div class="cal" data-k="cal"></div>
+        <div class="decision" data-k="decision" aria-live="polite"></div>
       </div>
     </article>
   </section>
@@ -224,7 +264,7 @@
     <div>
       <h2 id="krivance-title">KRIVANCE</h2>
       <p>A quantitative research company I co-founded, where I am CTO. Its public research looks at who is positioned where in markets, how overnight interest rates really move, and how trading signals fade once they are published.</p>
-      <p>Its Record is the panel at the top of this page. Each forecast is sealed before the outcome exists, signed, chained to the one before it and timestamped in Bitcoin, then graded in public. Misses are shown, not deleted.</p>
+      <p>Its Record is the ledger you tried to break above. Each forecast is sealed before the outcome exists, signed, chained to the one before it and timestamped in Bitcoin, then graded in public. Misses are shown, not deleted.</p>
       <p class="links"><a href="https://krivance.com/">Visit krivance.com</a><a href="https://krivance.com/record">Check the Record</a></p>
     </div>
   </section>
@@ -233,25 +273,19 @@
     <div class="about-copy">
       <h2 id="about-title">How I work</h2>
       <p>I treat every important claim in software as something that should come with its proof. That means writing down exactly what a number means, building a second implementation to check the first, breaking the system on purpose, and stating the limits next to every result.</p>
-      <p>I'm studying for a B.Tech (Hons.) in Computer Science and Engineering, graduating in 2028, and I'm open to hard engineering and research problems.</p>
+      <p>I&rsquo;m studying for a B.Tech (Hons.) in Computer Science and Engineering, graduating in 2028, and I&rsquo;m open to hard engineering and research problems.</p>
     </div>
     <div class="contact">
       <a class="btn btn-solid" href="mailto:kris7090779999@gmail.com">kris7090779999@gmail.com</a>
       <a class="btn" href="https://github.com/Krishna-V-Gowda">GitHub</a>
       <a class="btn" href="https://krivance.com/">krivance.com</a>
     </div>
-    <div class="also">
-      <h3>Also built</h3>
-      <ul>
-        <li><a href="https://github.com/Krishna-V-Gowda/dayflow-hrms">Dayflow</a>, an HR system that shows HR how approving a leave affects team coverage before they decide.</li>
-      </ul>
-    </div>
   </section>
 </main>
 
 <footer class="foot">
   <span>Krishna V. Gowda, Bengaluru</span>
-  <span>No trackers. The demos use each project's own published data.</span>
+  <span>No trackers. Every demo uses its project&rsquo;s own published data.</span>
 </footer>
 </body>
 </html>
