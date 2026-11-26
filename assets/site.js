@@ -12,7 +12,7 @@ const inr = (paise) => (paise < 0 ? "−₹" : "₹") + (Math.abs(paise) / 100).
 /* ---------- Feel: vibration where the device has it (Android), and optional sound ---------- */
 
 /** A short vibration at meaningful moments. iOS ignores it; reduced motion turns it off. */
-const buzz = (pattern) => { if (!reduceMotion && navigator.vibrate) try { navigator.vibrate(pattern); } catch {} };
+const buzz = (pattern) => { if (!reduceMotion && navigator.vibrate && navigator.userActivation?.hasBeenActive !== false) try { navigator.vibrate(pattern); } catch {} };
 let soundOn = false;
 try { soundOn = localStorage.getItem("kvg-sound") === "on"; } catch {}
 let audio = null;
@@ -95,44 +95,6 @@ function sizeCanvas(canvas) {
 
 /** Paint a range input's filled part in its accent colour. */
 const fillRange = (input) => input.style.setProperty("--fill", `${((input.value - input.min) / (input.max - input.min || 1)) * 100}%`);
-
-/* ---------- Type that answers the pointer ---------- */
-
-function initPlayType() {
-  const h1 = $(".play-type");
-  if (!h1) return;
-  h1.setAttribute("aria-label", h1.textContent);
-  const words = h1.textContent.split(" ");
-  h1.innerHTML = `<span aria-hidden="true">${words.map((w) => `<span class="word">${[...w].map((c) => `<span class="ch">${c}</span>`).join("")}</span>`).join(" ")}</span>`;
-  if (reduceMotion) return;
-  const chars = [...h1.querySelectorAll(".ch")];
-  const tints = ["--c-proofloom", "--c-marketreplay", "--c-trustbench", "--c-apex", "--c-risklab", "--c-data301", "--c-dayflow"];
-  let px = -1e4, py = -1e4, raf = 0;
-  const paint = () => {
-    raf = 0;
-    for (const [i, c] of chars.entries()) {
-      const r = c.getBoundingClientRect();
-      const d = Math.hypot(r.left + r.width / 2 - px, r.top + r.height / 2 - py);
-      const f = Math.max(0, 1 - d / 190) ** 1.6; // falloff: a soft lens about 190px wide
-      c.style.setProperty("--w", Math.round(620 + 180 * f));
-      c.style.setProperty("--d", `${84 + 16 * f}%`);
-      c.style.setProperty("--tint", f > 0.55 ? `var(${tints[i % tints.length]})` : "inherit");
-    }
-  };
-  const move = (x, y) => { px = x; py = y; if (!raf) raf = requestAnimationFrame(paint); };
-  window.addEventListener("pointermove", (e) => move(e.clientX, e.clientY), { passive: true });
-  document.addEventListener("pointerleave", () => move(-1e4, -1e4));
-  // The one orchestrated moment: on load a lens sweeps once across the headline.
-  const r = h1.getBoundingClientRect();
-  const t0 = performance.now();
-  const sweep = (now) => {
-    const p = (now - t0) / 1400;
-    if (p > 1) return move(-1e4, -1e4);
-    move(r.left + (r.width + 300) * p - 150, r.top + r.height * (0.2 + 0.6 * p));
-    requestAnimationFrame(sweep);
-  };
-  setTimeout(() => requestAnimationFrame(sweep), 350);
-}
 
 /** Primary buttons lean toward a mouse pointer. */
 function initMagnets() {
@@ -272,6 +234,18 @@ async function initRecord() {
   });
   list.addEventListener("pointerleave", idle);
   undo.addEventListener("click", () => { forged = null; feel.tap(); run(true); });
+  // The hero's 3D chain can forge a page too; the board below catches it the same way.
+  window.addEventListener("record:forge", (e) => { forged = forged === e.detail ? null : e.detail; run(true); });
+  const ticker = $("#ticker");
+  const report = (state) => {
+    tell("record", { verdicts: [...verdicts], forged, hashes: entries.map((e) => e.hash), labels: original.map((e) => label(e).long), state });
+    if (!ticker) return;
+    const n = entries.length;
+    ticker.className = `ticker ${state === "ok" ? "ok" : state === "bad" ? "bad" : ""}`;
+    $("span", ticker).innerHTML = state === "ok"
+      ? `Your browser just verified ${n} signed forecasts${receipt ? `, anchored in Bitcoin block ${Math.max(...receipt.bitcoin).toLocaleString("en-US")}` : ""}.`
+      : state === "bad" ? `Forgery caught on page ${forged}. <a href="#record">See how</a>` : `Your browser is verifying ${n} signed forecasts…`;
+  };
 
   async function run(fast) {
     const r = token(list);
@@ -282,6 +256,7 @@ async function initRecord() {
     tiles.forEach((t) => { t.className = "tile"; });
     if (forged !== null) tiles[forged].classList.add("forged");
     status.className = "board-status";
+    report("checking");
     let prev = GENESIS;
     let bad = 0;
     for (let i = 0; i < entries.length; i++) {
@@ -300,7 +275,8 @@ async function initRecord() {
       if (v !== "Verified") { $(".t-when", tiles[i]).textContent = v; bad++; }
       else { tone(700 + i * 40, 30, "triangle", 0.03); }
       prev = e.hash;
-      await sleep(fast ? 35 : 90);
+      report("checking");
+      await sleep(fast ? 35 : 70);
     }
     if (r !== list._run) return;
     tiles.forEach((t, i) => { if (verdicts[i] === "Verified") $(".t-when", t).textContent = label(entries[i]).when; });
@@ -310,16 +286,17 @@ async function initRecord() {
       if (fast) feel.good(); else buzz(12);
       checked = true;
       idle();
+      report("ok");
     } else {
       status.textContent = `Tampering caught on page ${forged}`;
       status.className = "board-status bad";
+      report("bad");
       feel.alarm();
     }
     if (!sigCheck) $("#chain-fine").textContent = "This browser cannot check Ed25519 signatures, so only fingerprints and links were checked. A recent Chrome, Safari or Firefox checks all three.";
   }
   idle();
-  const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { io.disconnect(); run(false); } }, { threshold: 0.2 });
-  io.observe(list);
+  run(false);
 }
 
 /* ---------- Proofloom ---------- */
@@ -471,7 +448,7 @@ async function initBook() {
     rows.forEach(([side, price, q], i) => {
       const y = i * rowH;
       const barW = ((w - labelW - 64) * q) / max;
-      ctx.fillStyle = side === "S" ? color("--c-marketreplay") : color("--proof");
+      ctx.fillStyle = side === "S" ? color("--g2") : color("--proof");
       ctx.globalAlpha = 0.88;
       ctx.beginPath();
       ctx.roundRect(labelW, y + rowH * 0.18, Math.max(3, barW), rowH * 0.64, 4);
@@ -647,7 +624,7 @@ async function initRisk() {
   const xDay = (day) => L + ((W - L - R) * Math.min(day, d.days)) / d.days;
   const y = (v) => T + ((H - T - B) * (hi - v)) / (hi - lo);
   const ranked = Object.entries(d.curves).sort((a, b) => b[1].at(-1) - a[1].at(-1));
-  const palette = ["--c-risklab", "--ink", "--c-apex", "--c-proofloom", "--c-marketreplay", "--line-d"];
+  const palette = ["--proof", "--ink", "--g1", "--g2", "--g3", "--g4"];
   const hue = Object.fromEntries(ranked.map(([name], i) => [name, color(palette[i])]));
   const hidden = new Set();
   const paths = {};
@@ -939,7 +916,6 @@ function initDayflow() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initSound();
-  initPlayType();
   initMagnets();
   initRecord();
   initProofloom();

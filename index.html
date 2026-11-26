@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Krishna V. Gowda — systems that prove they're right</title>
   <meta name="description" content="Krishna V. Gowda builds software that can prove its own results: settlement controls, market-data replay, analytics verification, quantitative research, machine-learning labs and an HR decision engine. Co-founder and CTO of KRIVANCE.">
-  <meta name="theme-color" content="#eef0f4" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#111218" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#08090a">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Krishna V. Gowda">
   <meta property="og:title" content="Krishna V. Gowda — systems that prove they're right">
@@ -20,7 +19,7 @@
   <link rel="canonical" href="https://krishna-v-gowda.github.io/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Instrument+Sans:wdth,wght@75..100,400..700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
@@ -47,20 +46,19 @@
 
 <main id="top">
   <section class="hero" aria-labelledby="hero-title">
+    <canvas class="ledger3d" aria-hidden="true"></canvas>
     <div class="hero-copy">
-      <p class="hello">Hi, I&rsquo;m Krishna.</p>
-      <h1 id="hero-title" class="play-type">I build systems that prove they&rsquo;re right.</h1>
+      <p class="hello"><img src="assets/krishna-192.webp" width="40" height="40" alt="Krishna V. Gowda">Hi, I&rsquo;m Krishna.</p>
+      <h1 id="hero-title">I build systems that prove they&rsquo;re right.</h1>
       <p class="lede">Settlement controls that refuse a ₹1.37 mismatch. A market-data replay checked against a second, independent implementation. A forecasting record anyone can verify against Bitcoin. I study computer science in Bengaluru and I&rsquo;m the co-founder and CTO of <a href="https://krivance.com/">KRIVANCE</a>.</p>
       <div class="actions">
         <a class="btn btn-solid" href="#systems">Play with the work</a>
         <a class="btn" href="#record">Try to break it</a>
       </div>
     </div>
-    <div class="toys">
-      <canvas aria-hidden="true"></canvas>
-      <p class="toys-hint" aria-hidden="true">Push them around. Tap one to jump to it.</p>
-      <p class="toys-label" aria-hidden="true"></p>
-    </div>
+    <p class="ledger-label" aria-hidden="true"></p>
+    <p class="ticker" id="ticker" role="status"><i></i><span>Your browser is verifying KRIVANCE&rsquo;s 17 signed forecasts…</span></p>
+    <p class="ledger-hint" aria-hidden="true">Each glowing block is a signed forecast. Drag to turn the chain, tap a block to forge it.</p>
   </section>
 
   <section id="record" class="record" aria-labelledby="record-title">
@@ -270,6 +268,7 @@
   </section>
 
   <section id="method" class="about" aria-labelledby="about-title">
+    <img class="portrait" src="assets/krishna-640.webp" width="320" height="320" alt="Krishna V. Gowda, smiling, in sunglasses and a dark sweatshirt" loading="lazy">
     <div class="about-copy">
       <h2 id="about-title">How I work</h2>
       <p>I treat every important claim in software as something that should come with its proof. That means writing down exactly what a number means, building a second implementation to check the first, breaking the system on purpose, and stating the limits next to every result.</p>
