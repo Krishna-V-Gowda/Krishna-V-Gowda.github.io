@@ -155,6 +155,7 @@ function ledgerScene(THREE) {
     // Drag to turn, with inertia; the pointer gives a little parallax; a tap forges a page.
     const ray = new THREE.Raycaster();
     const ndc = new THREE.Vector2();
+    let lastMove = null;
     let yaw = 0, vyaw = reduceMotion ? 0 : 0.0016, tilt = 0, mx = 0, my = 0, drag = null, hover = -1, shake = 0;
     const pick = (e) => {
       const r = canvas.getBoundingClientRect();
@@ -181,6 +182,7 @@ function ledgerScene(THREE) {
         drag.moved += Math.abs(dx) + Math.abs(e.clientY - drag.y);
         drag.x = e.clientX; drag.y = e.clientY;
       } else {
+        lastMove = e;
         const i = pick(e);
         if (i !== hover) { hover = i; if (i >= 0) window.feel?.tick(); }
         canvas.style.cursor = hover >= 0 ? "pointer" : "grab";
@@ -244,6 +246,7 @@ function ledgerScene(THREE) {
           n.sprite.material.map.dispose();
           n.sprite.material.map = label(n.hash.slice(0, 8), css(i === d.forged ? "--refuse" : "--g2"));
         }
+        if (i === hover && lastMove) showTip(lastMove, i); // keep an open tooltip in step with the check
         if (i > 0) {
           const l = links[i - 1];
           const broken = v === "Link broken";
