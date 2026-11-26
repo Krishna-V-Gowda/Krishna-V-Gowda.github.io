@@ -60,6 +60,8 @@ def resolve_local(page: Path, reference: str) -> Path | None:
         return None
     if not parts.path:
         return page
+    if parts.path.startswith("/"):
+        return site_path(reference)  # root-relative links resolve from the site root, not the filesystem root
     return (page.parent / parts.path).resolve()
 
 

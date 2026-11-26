@@ -1,7 +1,83 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="A walk-forward laboratory for long-only allocation under covariance error, regime changes, tail risk, turnover, and transaction costs."><meta name="theme-color" content="#061017"><meta property="og:type" content="article"><meta property="og:site_name" content="KVG / Lab"><meta property="og:title" content="RiskLab — KVG / Lab"><meta property="og:description" content="A walk-forward laboratory for long-only allocation under covariance error, regime changes, tail risk, turnover, and transaction costs."><meta property="og:url" content="https://krishna-v-gowda.github.io/systems/risklab.html"><meta property="og:image" content="https://krishna-v-gowda.github.io/assets/og/risklab.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="RiskLab technical cover"><meta name="twitter:title" content="RiskLab — KVG / Lab"><meta name="twitter:description" content="A walk-forward laboratory for long-only allocation under covariance error, regime changes, tail risk, turnover, and transaction costs."><meta name="twitter:image" content="https://krishna-v-gowda.github.io/assets/og/risklab.png"><meta name="twitter:card" content="summary_large_image"><title>RiskLab — KVG / Lab</title><link rel="canonical" href="https://krishna-v-gowda.github.io/systems/risklab.html"><link rel="stylesheet" href="../styles.css">  <!-- KVG / LAB canonical browser identity -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RiskLab — Krishna V. Gowda</title>
+  <meta name="description" content="A walk-forward laboratory for long-only allocation under covariance error, regime changes, tail risk, turnover, and transaction costs.">
+  <meta name="theme-color" content="#08090a">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Krishna V. Gowda">
+  <meta property="og:title" content="RiskLab — Krishna V. Gowda">
+  <meta property="og:description" content="A walk-forward laboratory for long-only allocation under covariance error, regime changes, tail risk, turnover, and transaction costs.">
+  <meta property="og:url" content="https://krishna-v-gowda.github.io/systems/risklab.html">
+  <meta property="og:image" content="https://krishna-v-gowda.github.io/assets/og/risklab.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="RiskLab: Measure decisions under uncertainty—not just returns.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://krishna-v-gowda.github.io/systems/risklab.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
   <link rel="icon" href="/favicon-16x16.png?v=kvg-exact-1" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kvg-exact-1">
   <link rel="manifest" href="/site.webmanifest?v=kvg-exact-1">
-</head><body><a class="skip" href="#case">Skip to case study</a><header><div class="shell"><nav class="nav"><a class="brand" href="../index.html">KVG / LAB</a><div class="navlinks"><a href="../index.html#systems">Systems</a><a href="../index.html#method">Method</a><a href="https://github.com/Krishna-V-Gowda/RiskLab">Source</a></div></nav><div class="system-hero"><p class="eyebrow gold">QUANTITATIVE ROBUSTNESS</p><h1>RiskLab</h1><p class="lede">Measure decisions under uncertainty—not just returns.</p><div class="actions"><a class="button primary" href="https://github.com/Krishna-V-Gowda/RiskLab">Inspect source</a><a class="button" href="../index.html#systems">Back to atlas</a></div></div><img class="system-cover" src="../assets/risklab.svg" alt="RiskLab technical cover" width="1440" height="620"></div></header><main id="case" class="section shell"><div class="case-grid"><nav class="toc" aria-label="Case study sections"><p class="eyebrow">CASE STUDY</p><a href="#proposition">Proposition</a><a href="#difficulty">What is difficult</a><a href="#evidence">Evidence</a><a href="#boundary">Claim boundary</a><a href="#source">Deep inspection</a></nav><article class="prose"><section id="proposition"><h2>Proposition</h2><p>A walk-forward laboratory for long-only allocation under covariance error, regime changes, tail risk, turnover, and transaction costs.</p></section><section id="difficulty"><h2>What is technically difficult</h2><p>Portfolio rules are easy to make attractive in-sample. RiskLab forces strict trailing windows, weight drift, costs, optimizer accounting, scenario controls, and paired moving-block-bootstrap comparisons before interpreting a result.</p></section><section id="evidence"><h2>Evidence</h2><table class="evidence-table"><tr><th>Research surface</th><td>Six allocation rules and four deterministic scenarios.</td></tr><tr><th>Controlled data</th><td>1,800 × 8 heavy-tailed synthetic return panel across four regimes.</td></tr><tr><th>Uncertainty</th><td>500 paired circular moving-block-bootstrap resamples per nonbaseline comparison.</td></tr><tr><th>Integrity</th><td>29 tests and zero retained optimizer failures; adverse base path retained.</td></tr></table></section><section id="boundary"><h2>Where the claim stops</h2><div class="callout">Synthetic research evidence only. No historical alpha, live trading, investment suitability, or recommendation.</div></section><section id="source"><h2>Deep inspection</h2><p>The repository is the authoritative technical artifact. Start with its README, then architecture, tests, retained evidence, and limitations.</p><div class="actions"><a class="button primary" href="https://github.com/Krishna-V-Gowda/RiskLab">Open repository</a></div></section></article></div></main><footer class="shell footer"><span>Krishna V. Gowda · KVG / Lab</span><span>RiskLab</span></footer></body></html>
+  <script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+  <script src="/assets/site.js" defer></script>
+  <script type="module" src="/assets/scenes.js"></script>
+</head>
+<body>
+<a class="skip" href="#case">Skip to the case study</a>
+
+<header class="top">
+  <a class="name" href="/">Krishna V. Gowda</a>
+  <nav aria-label="Sections">
+    <a href="/#systems">All work</a>
+    <a href="/#method">How I work</a>
+    <a href="https://github.com/Krishna-V-Gowda/RiskLab">Source</a>
+  </nav>
+</header>
+
+<main id="case" class="case" style="--acc: var(--c-risklab)">
+  <section class="case-hero" aria-labelledby="case-title">
+    <a class="back" href="/#systems">All work</a>
+    <h1 id="case-title">RiskLab</h1>
+    <p class="case-tag">Measure decisions under uncertainty—not just returns.</p>
+    <p class="case-what">A walk-forward laboratory for long-only allocation under covariance error, regime changes, tail risk, turnover, and transaction costs.</p>
+    <p class="links"><a href="https://github.com/Krishna-V-Gowda/RiskLab">Inspect source</a></p>
+  </section>
+
+  <section class="case-demo" aria-label="Live proof">
+    <div class="demo" data-demo="risk">
+        <div class="demo-bar"><span>₹1 in each method. Run your finger along it.</span><button type="button" class="replay">Replay</button></div>
+        <svg class="risk" viewBox="0 0 640 300" role="img" aria-label="Wealth of six allocation methods over the simulated period"></svg>
+        <ul class="legend toggles" data-k="legend"></ul>
+        <p class="fine" data-k="readout">Tap a method to hide or show it.</p>
+      </div>
+    
+    <figure class="sig" data-sig="risklab">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">The same six wealth paths as walls in depth: the lowest in front, the best at the back. The pale plane is the ₹1 they started with.</figcaption>
+        </figure>
+  </section>
+
+  <div class="case-body">
+    <section id="difficulty"><h2>The hard part</h2><p>Portfolio rules are easy to make attractive in-sample. RiskLab forces strict trailing windows, weight drift, costs, optimizer accounting, scenario controls, and paired moving-block-bootstrap comparisons before interpreting a result.</p></section>
+    <section id="evidence"><h2>The evidence</h2><dl class="evidence"><div><dt>Research surface</dt><dd>Six allocation rules and four deterministic scenarios.</dd></div><div><dt>Controlled data</dt><dd>1,800 × 8 heavy-tailed synthetic return panel across four regimes.</dd></div><div><dt>Uncertainty</dt><dd>500 paired circular moving-block-bootstrap resamples per nonbaseline comparison.</dd></div><div><dt>Integrity</dt><dd>29 tests and zero retained optimizer failures; adverse base path retained.</dd></div></dl></section>
+    <section id="boundary"><h2>Where the claim stops</h2><p class="boundary">Synthetic research evidence only. No historical alpha, live trading, investment suitability, or recommendation.</p></section>
+    <section id="source"><h2>Go deeper</h2><p>The repository is the authoritative technical artifact. Start with its README, then architecture, tests, retained evidence, and limitations.</p><p class="links"><a href="https://github.com/Krishna-V-Gowda/RiskLab">Open repository</a></p></section>
+  </div>
+
+  <a class="case-next" href="/systems/data301.html"><span>Next</span><strong>DATA301 ML Studio</strong><em>Make the mathematics inspectable.</em></a>
+</main>
+
+<footer class="foot">
+  <span>Krishna V. Gowda, Bengaluru</span>
+  <span>No trackers. The live proof uses the project's own published data.</span>
+</footer>
+</body>
+</html>
