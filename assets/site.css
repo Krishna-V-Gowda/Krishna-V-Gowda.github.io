@@ -313,21 +313,43 @@ svg.risk { display: block; height: auto; touch-action: pan-y; cursor: crosshair;
 .no-webgl .terrain, .no-webgl .sig, .no-webgl canvas.apex3d { display: none; }
 
 /* KRIVANCE and about */
-.krivance { padding: clamp(56px, 8vw, 110px) var(--gutter); background: radial-gradient(ellipse 70% 120% at 85% 50%, var(--proof-soft), transparent 70%), var(--surface); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-.krivance > div { max-width: 46rem; display: grid; gap: 18px; }
-/* KRIVANCE's own wordmark treatment: Funnel Display, light, widely tracked. Tracking adds space after the last letter, so a negative right margin balances it. */
-.krivance h2.wordmark {
-  font: 520 clamp(2rem, 4.6vw, 3.6rem)/1 "Funnel Display", var(--display); letter-spacing: 0.34em; margin-right: -0.34em;
-  margin-bottom: 10px; background: linear-gradient(180deg, var(--ink) 30%, color-mix(in srgb, var(--ink) 55%, var(--proof)));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-  transition: letter-spacing 1.6s cubic-bezier(.16, 1, .3, 1), opacity 1.2s;
+.krivance {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); grid-template-areas: "copy lockup"; align-items: center; gap: clamp(32px, 5vw, 80px);
+  padding: clamp(64px, 9vw, 130px) var(--gutter); overflow: hidden;
+  background: radial-gradient(ellipse 60% 90% at 78% 50%, color-mix(in srgb, #8fd6e6 9%, transparent), transparent 70%), var(--surface);
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
 }
-.krivance h2.wordmark.pending { letter-spacing: 0.7em; opacity: 0; }
+.k-copy { grid-area: copy; max-width: 40rem; display: grid; gap: 18px; }
 .krivance p { font-size: 1.12rem; color: var(--muted); }
-.about { padding: clamp(56px, 8vw, 110px) var(--gutter); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px clamp(28px, 4vw, 56px); align-items: start; }
-.about .contact { grid-column: 2; }
-.portrait { width: clamp(120px, 14vw, 200px); height: auto; aspect-ratio: 1; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px var(--rule), 0 0 60px color-mix(in srgb, var(--proof) 18%, transparent); }
-.about-copy { max-width: 42rem; display: grid; gap: 18px; }
+/* KRIVANCE's own logo: the metallic K and hexagon from krivance.com's opening, with its wordmark beneath. */
+.k-lockup { grid-area: lockup; display: grid; justify-items: center; gap: clamp(14px, 2vw, 26px); }
+.kmark { position: relative; width: min(100%, 400px); aspect-ratio: 1; }
+.kmark::before { content: ""; position: absolute; inset: -25%; background: radial-gradient(closest-side, color-mix(in srgb, #8fd6e6 20%, transparent), transparent); pointer-events: none; }
+.kmark canvas { position: relative; width: 100%; height: 100%; aspect-ratio: auto; cursor: pointer; touch-action: pan-y; }
+.kmark-flat { display: none; position: absolute; inset: 14%; color: #aab0b5; }
+.no-webgl .kmark canvas { display: none; }
+.no-webgl .kmark-flat { display: block; }
+/* Tracking adds space after the last letter; matching left padding keeps the word centred under the mark. */
+.krivance h2.wordmark {
+  font: 560 clamp(0.95rem, 0.8rem + 0.5vw, 1.25rem)/1 "Funnel Display", var(--display); letter-spacing: 0.42em; padding-left: 0.42em;
+  color: #f3f5f7; opacity: 0.86; transition: letter-spacing 1.4s cubic-bezier(.16, 1, .3, 1), padding 1.4s cubic-bezier(.16, 1, .3, 1), opacity 1s;
+}
+.krivance h2.wordmark.pending { letter-spacing: 0.68em; padding-left: 0.68em; opacity: 0; }
+.about {
+  padding: clamp(64px, 9vw, 130px) var(--gutter); display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  grid-template-areas: "photo copy" "photo contact"; gap: 28px clamp(32px, 5vw, 80px); align-items: center;
+}
+.about .contact { grid-area: contact; align-self: start; }
+/* The photo has no frame: it dissolves into the page, with a little of the teal light behind it. */
+.portrait { grid-area: photo; position: relative; margin: 0; width: min(100%, 480px); justify-self: center; aspect-ratio: 1; }
+.portrait::before { content: ""; position: absolute; inset: 6%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--proof) 16%, transparent), transparent); filter: blur(30px); }
+.portrait img {
+  position: relative; display: block; width: 100%; height: 100%; object-fit: cover;
+  -webkit-mask-image: radial-gradient(closest-side at 47% 46%, #000 54%, rgb(0 0 0 / .5) 76%, transparent 100%); mask-image: radial-gradient(closest-side at 47% 46%, #000 54%, rgb(0 0 0 / .5) 76%, transparent 100%);
+  transition: filter 1.8s cubic-bezier(.16, 1, .3, 1), transform 2.4s cubic-bezier(.16, 1, .3, 1), opacity 1.4s;
+}
+.portrait.pending img { filter: blur(16px) saturate(0) brightness(.6); transform: scale(1.06); opacity: .4; }
+.about-copy { grid-area: copy; align-self: end; max-width: 42rem; display: grid; gap: 18px; }
 .about-copy p { font-size: 1.1rem; }
 .contact { display: flex; gap: 12px; flex-wrap: wrap; }
 .foot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 28px var(--gutter) 40px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
@@ -363,9 +385,11 @@ svg.risk { display: block; height: auto; touch-action: pan-y; cursor: crosshair;
 .case-next em { font-style: normal; opacity: 0.85; }
 
 @media (max-width: 900px) {
-  .about { grid-template-columns: minmax(0, 1fr); }
+  .about { grid-template-columns: minmax(0, 1fr); grid-template-areas: "photo" "copy" "contact"; }
+  .portrait { width: min(78%, 380px); }
+  .krivance { grid-template-columns: minmax(0, 1fr); grid-template-areas: "lockup" "copy"; }
+  .kmark { width: min(72%, 300px); }
   .system-copy { position: static; }
-  .about .contact { grid-column: auto; }
   .ledger-hint { display: none; }
   .hero { padding-bottom: 380px; min-height: 0; }
   .ticker { bottom: 22px; }

@@ -742,6 +742,135 @@ function apexScenes(THREE) {
   }));
 }
 
+/* ---------- KRIVANCE's logo: the metallic K and hexagon from krivance.com's opening, ported piece for piece ---------- */
+// Geometry, materials, lighting and flight timing follow components/intro/kScene.ts and timeline.ts on krivance.com.
+
+function krivanceScene(THREE) {
+  const canvas = document.querySelector(".kmark canvas");
+  if (!canvas) return;
+  whenNear(canvas, () => {
+    const HEX_RADIUS = 1.58, BEAM_WIDTH = 0.18, BEAM_DEPTH = 0.28, MARK_OUTER = HEX_RADIUS + BEAM_WIDTH / 2;
+    const ARRIVE = [0, 0.07, 0.14, 0.21, 0.28, 0.35, 0.44], FLIGHT = 0.86, ASSEMBLED = ARRIVE[6] + FLIGHT;
+    const clamp01 = (v) => Math.min(1, Math.max(0, v));
+    const smooth = (a, b, v) => { const t = clamp01((v - a) / (b - a)); return t * t * (3 - 2 * t); };
+    const outCubic = (t) => 1 - (1 - clamp01(t)) ** 3;
+    const outQuint = (t) => 1 - (1 - clamp01(t)) ** 5;
+
+    const hex = Array.from({ length: 6 }, (_, i) => { const a = Math.PI / 6 + (i * Math.PI) / 3; return new THREE.Vector2(Math.cos(a) * HEX_RADIUS, Math.sin(a) * HEX_RADIUS); });
+    const pieces = [
+      ...hex.map((a, i) => { const b = hex[(i + 1) % 6]; const mid = a.clone().add(b).multiplyScalar(0.5); return { kind: "beam", length: a.distanceTo(b), position: [mid.x, mid.y, 0], rotation: Math.atan2(b.y - a.y, b.x - a.x) }; }),
+      { kind: "k", position: [0, 0, 0.025], rotation: 0 },
+    ];
+    const beamGeometry = (length) => {
+      const hl = length / 2, hw = BEAM_WIDTH / 2, miter = hw * Math.tan(Math.PI / 6);
+      const shape = new THREE.Shape();
+      shape.moveTo(-hl - miter, -hw); shape.lineTo(hl + miter, -hw); shape.lineTo(hl - miter, hw); shape.lineTo(-hl + miter, hw); shape.closePath();
+      const g = new THREE.ExtrudeGeometry(shape, { depth: BEAM_DEPTH, steps: 1, bevelEnabled: true, bevelThickness: 0.022, bevelSize: 0.018, bevelOffset: -0.004, bevelSegments: 4 });
+      g.center(); g.computeVertexNormals();
+      return g;
+    };
+    const kGeometry = () => {
+      const s = new THREE.Shape();
+      [[-0.78, 1.12], [-0.54, 1.12], [-0.54, 0.155], [0.685, 1.144], [0.835, 0.956], [-0.342, 0.004], [0.898, -0.926], [0.742, -1.114], [-0.54, -0.152], [-0.54, -1.12], [-0.78, -1.12]]
+        .forEach(([x, y], i) => (i ? s.lineTo(x, y) : s.moveTo(x, y)));
+      s.closePath();
+      const g = new THREE.ExtrudeGeometry(s, { depth: 0.32, steps: 1, bevelEnabled: true, bevelThickness: 0.026, bevelSize: 0.022, bevelOffset: -0.004, bevelSegments: 5 });
+      g.center(); g.computeVertexNormals();
+      return g;
+    };
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+    renderer.setClearColor(0x000000, 0);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.78;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const scene = new THREE.Scene();
+    // The studio the metal reflects: soft boxes, one glacier rim, a ring below.
+    const env = new THREE.Scene();
+    const rect = new THREE.PlaneGeometry(1, 1), ring = new THREE.RingGeometry(0.5, 1, 64);
+    [[rect, "#e5edf2", 6, [-3.5, 4.5, 2], [0, Math.PI / 5, 0], [5, 5, 1]], [rect, "#8fd6e6", 0.9, [4.5, 1.2, 1], [0, -Math.PI / 3, 0], [1.5, 5, 1]],
+     [rect, "#b8c1ca", 3.8, [3.2, 1.1, 3.4], [0, -Math.PI / 4, 0], [2.2, 5.2, 1]], [rect, "#eef3f7", 6.4, [-5, 1.1, 0.2], [0, Math.PI / 2, 0], [1.2, 6.4, 1]],
+     [ring, "#b7c3cd", 3.1, [0, -4, -2], [Math.PI / 2, 0, 0], [4, 4, 4]], [rect, "#dfe7ee", 0.5, [-1.2, 2.2, 7], [-0.25, -0.15, 0], [9, 3.2, 1]]]
+      .forEach(([geo, color, k, p, r, sc]) => {
+        const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(k), side: THREE.DoubleSide, toneMapped: false }));
+        m.position.set(...p); m.rotation.set(...r); m.scale.set(...sc);
+        env.add(m);
+      });
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(env, 0, 0.1, 100).texture;
+    pmrem.dispose();
+
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+    camera.position.set(0, 0, 9);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.46), new THREE.HemisphereLight("#e7ecef", "#15191d", 0.68));
+    const key = new THREE.DirectionalLight("#f0f3f5", 1.55); key.position.set(-4, 6, 7);
+    const fill = new THREE.DirectionalLight("#9aa5ad", 0.58); fill.position.set(5, -3, 4);
+    const glint = new THREE.DirectionalLight("#ffffff", 0); glint.position.set(-7, 2, 6);
+    scene.add(key, fill, glint);
+
+    const mark = new THREE.Group();
+    scene.add(mark);
+    const meshes = pieces.map((p) => {
+      const mat = new THREE.MeshPhysicalMaterial({ color: p.kind === "k" ? "#aab0b5" : "#858d93", metalness: 0.9, roughness: p.kind === "k" ? 0.28 : 0.34, clearcoat: 0.12, clearcoatRoughness: 0.38, envMapIntensity: 0.76, emissive: new THREE.Color("#8fd6e6"), emissiveIntensity: 0, transparent: true, opacity: 0 });
+      const m = new THREE.Mesh(p.kind === "k" ? kGeometry() : beamGeometry(p.length), mat);
+      m.position.set(...p.position); m.rotation.z = p.rotation;
+      mark.add(m);
+      return m;
+    });
+    const scatter = pieces.map((_, i) => { const a = i * 2.399 + 0.62, r = 2.6 + (i % 4) * 0.45; return { x: Math.cos(a) * r, y: Math.sin(a) * r, z: 1.2 + ((i % 4) - 1.5) * 0.75, rx: ((i % 3) - 1) * 0.9, ry: ((i % 2) - 0.5) * 1.2, rz: (i % 2 ? 1 : -1) * (0.8 + (i % 3) * 0.32) }; });
+
+    const fit = () => {
+      const w = canvas.clientWidth || 1, h = canvas.clientHeight || 1;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      // Fill about 78% of the canvas, whatever its size.
+      mark.userData.fit = (0.78 * camera.position.z * Math.tan((camera.fov * Math.PI) / 360)) / MARK_OUTER;
+    };
+    fit();
+    renderer.compile(scene, camera);
+
+    const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+    window.addEventListener("pointermove", (e) => {
+      const r = canvas.getBoundingClientRect();
+      pointer.tx = Math.max(-1.5, Math.min(1.5, ((e.clientX - r.left) / r.width - 0.5) * 2));
+      pointer.ty = Math.max(-1.5, Math.min(1.5, ((e.clientY - r.top) / r.height - 0.5) * 2));
+    }, { passive: true });
+    // It assembles the first time it is seen; a tap scatters it and it locks together again.
+    let t0 = null;
+    const assemble = () => { t0 = null; kick(); };
+    canvas.addEventListener("click", () => { window.feel?.tap(); assemble(); setTimeout(() => buzz([6, 40, 6, 40, 14]), (ASSEMBLED - 0.1) * 1000); });
+    new ResizeObserver(() => { fit(); kick(); }).observe(canvas);
+
+    const kick = runWhenVisible(canvas, (now) => {
+      t0 ??= now;
+      const t = reduceMotion ? 9 : now - t0;
+      pointer.x += (pointer.tx - pointer.x) * 0.06;
+      pointer.y += (pointer.ty - pointer.y) * 0.06;
+      pieces.forEach((piece, i) => {
+        const k = (t - ARRIVE[i]) / FLIGHT;
+        const travel = 1 - outQuint(k), turn = 1 - outCubic(k), s = scatter[i], m = meshes[i];
+        m.position.set(piece.position[0] + s.x * travel, piece.position[1] + s.y * travel, piece.position[2] + s.z * travel);
+        m.rotation.set(s.rx * turn, s.ry * turn, piece.rotation + s.rz * turn);
+        m.material.opacity = smooth(0, 0.32, k);
+        // A breath of glacier light runs through the metal as it locks.
+        m.material.emissiveIntensity = 0.35 * Math.exp(-((t - ASSEMBLED) ** 2) * 6);
+      });
+      const settle = outCubic(t / (ASSEMBLED + 0.3));
+      const breathe = reduceMotion ? 0 : Math.sin(t * 1.5) * 0.028 * settle;
+      mark.rotation.y = -0.62 + 0.52 * settle + pointer.x * 0.22;
+      mark.rotation.x = 0.24 - 0.19 * settle - pointer.y * 0.16;
+      mark.position.y = breathe;
+      mark.scale.setScalar(mark.userData.fit * (0.9 + 0.1 * settle));
+      // The light crosses the metal once it has locked together, then every few seconds after.
+      const sweep = clamp01(((t - 1.0) % 7) / 0.7);
+      glint.position.x = -7 + 14 * sweep;
+      glint.intensity = t < 1.0 ? 0 : Math.sin(Math.PI * sweep) * 3.4;
+      renderer.render(scene, camera);
+    });
+  });
+}
+
 /* ---------- Start ---------- */
 
 if (!hasWebGL()) {
@@ -756,6 +885,7 @@ if (!hasWebGL()) {
       ribbonsScene(THREE);
       bowlScene(THREE);
       apexScenes(THREE);
+      krivanceScene(THREE);
     })
     .catch(() => document.documentElement.classList.add("no-webgl"));
 }

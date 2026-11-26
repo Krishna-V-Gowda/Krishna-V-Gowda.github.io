@@ -877,13 +877,16 @@ function initDayflow() {
   render();
 }
 
-/** The KRIVANCE wordmark settles from wide tracking into place once, as it comes into view. */
-function initWordmark() {
-  const mark = $(".krivance .wordmark");
-  if (!mark || reduceMotion) return;
-  mark.classList.add("pending");
-  const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { io.disconnect(); requestAnimationFrame(() => mark.classList.remove("pending")); } }, { threshold: 0.6 });
-  io.observe(mark);
+/** Two one-time arrivals: the KRIVANCE wordmark settles from wide tracking, and the portrait develops out of a blur. */
+function initArrivals() {
+  if (reduceMotion) return;
+  for (const [sel, threshold] of [[".krivance .wordmark", 0.6], [".portrait", 0.35]]) {
+    const el = $(sel);
+    if (!el) continue;
+    el.classList.add("pending");
+    const io = new IntersectionObserver((es) => { if (es[0].isIntersecting) { io.disconnect(); requestAnimationFrame(() => el.classList.remove("pending")); } }, { threshold });
+    io.observe(el);
+  }
 }
 
 /* ---------- Start ---------- */
@@ -898,6 +901,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initRisk();
   initGradient();
   initDayflow();
-  initWordmark();
+  initArrivals();
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => location.reload());
 });
