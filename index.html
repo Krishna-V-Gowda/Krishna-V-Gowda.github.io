@@ -1,30 +1,220 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Krishna V. Gowda builds evidence-bearing systems across financial controls, market infrastructure, analytical reliability, quantitative research, and scientific machine learning.">
-  <meta name="theme-color" content="#061017"><meta property="og:image" content="https://krishna-v-gowda.github.io/assets/social-preview.png"><meta name="twitter:card" content="summary_large_image"><meta property="og:title" content="KVG / Lab — Research + Engineering"><meta property="og:description" content="Systems that make hidden assumptions inspectable."><meta property="og:type" content="website"><meta property="og:url" content="https://krishna-v-gowda.github.io/"><meta property="og:site_name" content="KVG / Lab"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="KVG / Lab — Krishna V. Gowda">
-  <title>KVG / Lab — Systems that make hidden assumptions inspectable</title><link rel="canonical" href="https://krishna-v-gowda.github.io/"><link rel="stylesheet" href="styles.css">
-  <!-- KVG / LAB canonical browser identity -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Krishna V. Gowda — systems that prove they're right</title>
+  <meta name="description" content="Krishna V. Gowda builds software that can prove its own results: settlement controls, market-data replay, analytics verification, quantitative research and machine-learning labs. Co-founder and CTO of KRIVANCE.">
+  <meta name="theme-color" content="#edf1f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Krishna V. Gowda">
+  <meta property="og:title" content="Krishna V. Gowda — systems that prove they're right">
+  <meta property="og:description" content="Every claim on this page is checked live, in your browser.">
+  <meta property="og:url" content="https://krishna-v-gowda.github.io/">
+  <meta property="og:image" content="https://krishna-v-gowda.github.io/assets/social-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Krishna V. Gowda — systems that prove they're right">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://krishna-v-gowda.github.io/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;700;800;900&display=swap">
+  <link rel="stylesheet" href="assets/site.css">
   <link rel="icon" href="/favicon.ico?v=kvg-exact-1" sizes="any">
   <link rel="icon" href="/favicon-32x32.png?v=kvg-exact-1" type="image/png" sizes="32x32">
   <link rel="icon" href="/favicon-16x16.png?v=kvg-exact-1" type="image/png" sizes="16x16">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=kvg-exact-1">
   <link rel="manifest" href="/site.webmanifest?v=kvg-exact-1">
+  <script src="assets/site.js" defer></script>
+  <script type="module" src="assets/scenes.js"></script>
 </head>
 <body>
-<a class="skip" href="#systems">Skip to systems</a>
-<header class="hero"><div class="shell"><nav class="nav"><a class="brand" href="#top">KVG / LAB</a><div class="navlinks"><a href="#systems">Systems</a><a href="#method">Method</a><a href="#notes">Field notes</a><a href="#contact">Contact</a></div></nav><div id="top" class="hero-grid"><div><p class="eyebrow">INDEPENDENT RESEARCH + ENGINEERING · BENGALURU</p><h1>Systems that make hidden assumptions <span class="coral">inspectable.</span></h1><p class="lede">I work across financial controls, market infrastructure, analytical reliability, quantitative research, and scientific machine learning. The shared discipline is executable evidence: explicit semantics, independent references, controlled failure, reproducible measurement, and honest limits.</p><div class="actions"><a class="button primary" href="#systems">Enter the systems atlas</a><a class="button" href="https://github.com/Krishna-V-Gowda">Inspect the source</a></div></div><div class="hero-art"><img src="assets/system-map.svg" alt="Five systems connected through bounded evidence" width="1200" height="560"></div></div><dl class="proof-strip"><div><dt>5</dt><dd>distinct technical worlds</dd></div><div><dt>₹1.37</dt><dd>enough to block a close</dd></div><div><dt>500k</dt><dd>retained replay workload</dd></div><div><dt>16</dt><dd>exact-source analytical checks</dd></div><div><dt>500</dt><dd>paired block-bootstrap resamples</dd></div></dl></div></header>
-<main>
-<section id="systems" class="section shell"><div class="section-head"><div><p class="eyebrow">SELECTED SYSTEMS</p></div><div><h2>Five different problems.<br>One standard of proof.</h2><p>The portfolio is intentionally small. Each system earns its place through a different kind of technical difficulty—and publishes the boundary of what its evidence can support.</p></div></div><div class="atlas">
-<article class="card hero-card"><div class="card-copy"><p class="index">01 / FINANCIAL CONTROL + AI JUDGMENT</p><h3>Proofloom</h3><p>Verification-first settlement close. AI ranks damaged references; integer-paise invariants and explicit human authority decide whether the close is permitted.</p><p class="metric">137 paise wrong → close refused.</p><p class="boundary">Synthetic records and generated labels only. No real money movement, production accuracy, ROI, or regulatory claim.</p><div class="links"><a href="systems/proofloom.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/proofloom">Source</a><a href="https://github.com/Krishna-V-Gowda/proofloom/blob/main/evaluation/results.md">Evidence</a></div></div><img src="assets/proofloom.svg" alt="Proofloom technical cover" width="1280" height="640"></article>
-<article class="card"><img src="assets/marketreplay.svg" alt="MarketReplay technical cover" width="1280" height="640"><div class="card-copy"><p class="index">02 / SYSTEMS + PROTOCOLS</p><h3>MarketReplay</h3><p>Deterministic C++20 replay for a bounded TotalView-ITCH subset, order-state reconstruction, and exact cross-language differential evidence.</p><p class="metric">Independent Python oracle · 18 scenarios · 128 corruptions · 500k messages.</p><p class="boundary">No live feed, exchange certification, complete ITCH coverage, or universal throughput claim.</p><div class="links"><a href="systems/marketreplay.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/MarketReplay">Source</a></div></div></article>
-<article class="card"><img src="assets/trustbench.svg" alt="TrustBench technical cover" width="1440" height="620"><div class="card-copy"><p class="index">03 / ANALYTICAL CORRECTNESS</p><h3>TrustBench × Apex</h3><p>Execute exact shipped analytics source against independent statistical references, metamorphic invariants, and preserved counterexamples.</p><p class="metric">7 passes / 3 failed invariants → 15 passes / 0 failures.</p><p class="boundary">Current adapter targets the documented Apex release; it is not a universal analytics certifier.</p><div class="links"><a href="systems/trustbench.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/TrustBench">Verifier</a><a href="https://github.com/Krishna-V-Gowda/EDA-InsightLab-Apex">Product</a></div></div></article>
-<article class="card"><img src="assets/risklab.svg" alt="RiskLab technical cover" width="1440" height="620"><div class="card-copy"><p class="index">04 / QUANTITATIVE ROBUSTNESS</p><h3>RiskLab</h3><p>A walk-forward laboratory for allocation under estimation error, regime change, tail risk, turnover, and transaction costs.</p><p class="metric">Six allocators · four scenarios · 1,800 × 8 panel · paired block bootstrap.</p><p class="boundary">Controlled synthetic research only; no historical alpha, suitability, or investment recommendation.</p><div class="links"><a href="systems/risklab.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/RiskLab">Source</a></div></div></article>
-<article class="card"><img src="assets/data301.svg" alt="DATA301 technical cover" width="1440" height="620"><div class="card-copy"><p class="index">05 / SCIENTIFIC ML PRODUCT</p><h3>DATA301 ML Studio</h3><p>Twelve interactive laboratories whose numerical cores remain small enough to inspect and independent enough to test outside the interface.</p><p class="metric">60 source tests · 7 metamorphic properties · 12 live labs.</p><p class="boundary">Educational two-dimensional algorithms; no cohort-scale or production-usage claim.</p><div class="links"><a href="systems/data301.html">Case study</a><a href="https://data301-ml-studio.vercel.app/">Live studio</a><a href="https://github.com/Krishna-V-Gowda/DATA301-ML-Studio">Source</a></div></div></article>
-<article class="card wide-card"><img src="assets/apex.svg" alt="Apex product cover" width="1200" height="600"><div class="card-copy"><p class="index">PRODUCT SUBJECT / REMEDIATION</p><h3>EDA InsightLab Apex</h3><p>A local-first analytical workspace and the real product subject through which TrustBench demonstrates reproducible defect-to-repair engineering.</p><p class="metric">Exact-source regressions protect ingestion, statistics, association, leakage, and PCA.</p><p class="boundary">Exploratory analytical support—not causal inference, model validation, or automatic production readiness.</p><div class="links"><a href="systems/apex.html">Case study</a><a href="https://krishna-v-gowda.github.io/EDA-InsightLab-Apex/">Live product</a><a href="https://github.com/Krishna-V-Gowda/EDA-InsightLab-Apex">Source</a></div></div></article>
-</div></section>
-<section id="method" class="section method"><div class="shell method-grid"><div><p class="eyebrow">THE METHOD</p><h2>Claims terminate in artifacts.</h2><p class="lede">The strongest feature of the portfolio is not a framework or language. It is a repeatable engineering stance: name the semantics, build an independent reference, expose failure, measure the result, and publish the boundary.</p><div class="principles"><div><b>01</b><h3>Define semantics</h3><p>Money, event order, estimands, objectives, and exclusions are explicit before metrics appear.</p></div><div><b>02</b><h3>Build a reference</h3><p>Independent implementations or calculations make silent agreement failures observable.</p></div><div><b>03</b><h3>Break the system</h3><p>Malformed input, duplicates, future-data mutation, degenerate data, and outages are first-class tests.</p></div><div><b>04</b><h3>Bound the claim</h3><p>Environment, workload, synthetic status, missing validation, and scale limits travel with every number.</p></div></div></div><img src="assets/header.svg" alt="KVG Lab evidence-bearing engineering map" width="1200" height="410"></div></section>
-<section id="notes" class="section shell"><div class="section-head"><div><p class="eyebrow">FIELD NOTES</p></div><div><h2>The uncomfortable result stays.</h2><p>Negative or bounded evidence is not edited out for presentation. It is part of the engineering record.</p></div></div><div class="field-notes"><article class="note"><p class="index coral">FINANCIAL CONTROL</p><h3>A candidate can be plausible and still be unsafe.</h3><p>Proofloom separates evidence ranking from authority so similarity can never repair a broken cash invariant.</p></article><article class="note"><p class="index blue">DIFFERENTIAL EVIDENCE</p><h3>One implementation is not its own oracle.</h3><p>MarketReplay and TrustBench both introduce independent reference planes before asking the public to trust their result.</p></article><article class="note"><p class="index gold">QUANTITATIVE HONESTY</p><h3>The adverse path is retained.</h3><p>RiskLab keeps its negative synthetic base case instead of tuning the generator until the chart becomes persuasive.</p></article></div></section>
-<section id="contact" class="section contact"><div class="shell"><p class="eyebrow">CONTACT</p><h2>Open to difficult engineering and research conversations.</h2><p class="lede">B.Tech. (Hons.) Computer Science & Engineering · expected 2028 · Bengaluru, India.</p><div class="actions"><a class="button primary" href="mailto:kris7090779999@gmail.com">kris7090779999@gmail.com</a><a class="button" href="https://github.com/Krishna-V-Gowda">GitHub</a><a class="button" href="https://krivance.com/">krivance.com</a></div></div></section>
-</main><footer class="shell footer"><span>Krishna V. Gowda · KVG / Lab</span><span>Dependency-light technical index · evidence before adjectives</span></footer></body></html>
+<a class="skip" href="#systems">Skip to the work</a>
+
+<header class="top">
+  <a class="name" href="#top">Krishna V. Gowda</a>
+  <nav aria-label="Sections">
+    <a href="#systems">Work</a>
+    <a href="#krivance">KRIVANCE</a>
+    <a href="#method">About</a>
+    <a href="https://github.com/Krishna-V-Gowda">GitHub</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="chain3d" aria-hidden="true"><canvas></canvas></div>
+    <div class="hero-copy">
+      <h1 id="hero-title">I build systems that prove they're right.</h1>
+      <p class="lede">Settlement controls that refuse a ₹1.37 mismatch. A market-data replay checked against a second, independent implementation. A forecasting record anyone can verify against Bitcoin. I'm a computer science student in Bengaluru and the co-founder and CTO of <a href="https://krivance.com/">KRIVANCE</a>.</p>
+      <div class="actions">
+        <a class="btn btn-solid" href="#systems">See the work</a>
+        <a class="btn" href="mailto:kris7090779999@gmail.com">Email me</a>
+      </div>
+      <p class="hero-note">The record panel on this page is not an animation of a proof. It is one. Your browser is checking every hash and signature in KRIVANCE's public forecast record right now.</p>
+    </div>
+
+    <figure class="chain-panel" aria-labelledby="chain-caption">
+      <div class="chain-head">
+        <span id="chain-caption">KRIVANCE Record, checked in your browser</span>
+        <span class="chain-status" id="chain-status" role="status" aria-live="polite">Checking…</span>
+      </div>
+      <ol class="chain" id="chain" aria-label="Record entries"></ol>
+      <div class="chain-foot">
+        <p class="anchor" id="chain-anchor"></p>
+        <div class="chain-actions">
+          <button type="button" class="btn btn-small" id="tamper">Tamper with entry 7</button>
+          <a class="text-link" href="https://krivance.com/record">Live record</a>
+        </div>
+      </div>
+      <figcaption class="fine" id="chain-fine">Copy of the record taken 26 November 2026. The live version keeps growing at krivance.com/record.</figcaption>
+    </figure>
+  </section>
+
+  <section id="systems" class="work" aria-labelledby="work-title">
+    <div class="section-intro">
+      <h2 id="work-title">Five systems. Each one shows its working.</h2>
+      <p>Every panel below runs on the project's real data, taken from its repository. Press replay on any of them.</p>
+    </div>
+
+    <article class="system" id="proofloom" aria-labelledby="proofloom-title">
+      <div class="system-copy">
+        <h3 id="proofloom-title">Proofloom</h3>
+        <p class="what">A settlement close for payments. A model ranks messy evidence, but fixed money rules and a human reviewer decide whether the books can close.</p>
+        <p class="proof">One settlement looks fine and is short by 137 paise. Proofloom refuses to close it, and no model or reviewer can override that.</p>
+        <p class="limits">Synthetic data. No real money moves.</p>
+        <p class="links"><a href="systems/proofloom.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/proofloom">Source</a></p>
+      </div>
+      <div class="demo" data-demo="proofloom">
+        <div class="demo-bar"><span>Settlement set_demo_04, rebuilt from its 21 payments</span><button type="button" class="replay">Replay</button></div>
+        <div class="ledger">
+          <div class="ledger-row"><span>Payments captured</span><span class="num" data-k="gross">₹0.00</span></div>
+          <div class="ledger-row minus"><span>Refunds</span><span class="num" data-k="refunds"></span></div>
+          <div class="ledger-row minus"><span>Fees</span><span class="num" data-k="fees"></span></div>
+          <div class="ledger-row minus"><span>Tax on fees</span><span class="num" data-k="tax"></span></div>
+          <div class="ledger-row total"><span>Expected settlement</span><span class="num" data-k="expected"></span></div>
+          <div class="ledger-row"><span>Processor reports</span><span class="num" data-k="reported"></span></div>
+          <div class="ledger-row diff"><span>Difference</span><span class="num" data-k="diff"></span></div>
+        </div>
+        <p class="verdict" data-k="verdict" aria-live="polite"></p>
+      </div>
+    </article>
+
+    <article class="system" id="marketreplay" aria-labelledby="marketreplay-title">
+      <div class="system-copy">
+        <h3 id="marketreplay-title">MarketReplay</h3>
+        <p class="what">A C++20 engine that rebuilds a stock exchange's order book from its binary message feed (Nasdaq TotalView-ITCH), one message at a time.</p>
+        <p class="proof">A separate Python implementation replays the same feed. Both must end in exactly the same state, byte for byte, across 500,000 messages.</p>
+        <p class="limits">A bounded subset of ITCH. Not a live trading system.</p>
+        <p class="links"><a href="systems/marketreplay.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/MarketReplay">Source</a></p>
+        <figure class="terrain">
+          <canvas aria-hidden="true"></canvas>
+          <figcaption class="fine">The same 700 messages as a landscape: price runs across, time runs back, and height is the shares resting at each price.</figcaption>
+        </figure>
+      </div>
+      <div class="demo" data-demo="book">
+        <div class="demo-bar"><span>Replaying 700 real messages from the test fixture</span><button type="button" class="replay">Replay</button></div>
+        <div class="book-wrap"><canvas class="book" width="640" height="300" aria-label="Order book depth by price level"></canvas></div>
+        <dl class="counters">
+          <div><dt>Messages</dt><dd data-k="msgs">0</dd></div>
+          <div><dt>Resting orders</dt><dd data-k="orders">0</dd></div>
+          <div><dt>Invariant checks</dt><dd data-k="checks">0</dd></div>
+        </dl>
+        <p class="fine">The largest price levels, buy and sell. After every message, the shares on each level must equal the sum of the orders resting there; one mismatch would stop the replay. Prices come from the project's synthetic test fixture.</p>
+      </div>
+    </article>
+
+    <article class="system" id="trustbench" aria-labelledby="trustbench-title">
+      <div class="system-copy">
+        <h3 id="trustbench-title">TrustBench and Apex</h3>
+        <p class="what">Apex is a data-exploration app that runs in the browser. TrustBench takes the exact code Apex ships and checks its statistics against independent reference libraries.</p>
+        <p class="proof">The first run passed 7 of 16 checks. After the fixes, 15 of 16. TrustBench recorded the fingerprint of the fixed code, and this panel checks that the live app still matches it.</p>
+        <p class="limits">Checks one documented Apex release, not any analytics tool.</p>
+        <p class="links"><a href="systems/trustbench.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/TrustBench">TrustBench</a><a href="https://krishna-v-gowda.github.io/EDA-InsightLab-Apex/">Open Apex</a></p>
+      </div>
+      <div class="demo" data-demo="apex">
+        <div class="demo-bar"><span>Fingerprinting the live Apex app now</span><button type="button" class="replay">Check again</button></div>
+        <div class="bars" aria-label="Checks passed before and after the fix">
+          <div class="bar-row"><span>Before the fix</span><div class="bar"><i data-k="before"></i></div><span class="num">7 / 16</span></div>
+          <div class="bar-row"><span>After the fix</span><div class="bar"><i data-k="after"></i></div><span class="num">15 / 16</span></div>
+        </div>
+        <div class="hashes">
+          <div><span>Fingerprint TrustBench recorded</span><code>51a9853d2a465a71197a28e71d16821d69b3cbbebf6c1bdc753563c12a3688df</code></div>
+          <div><span>Fingerprint of the app online now</span><code data-k="live">…</code></div>
+        </div>
+        <p class="verdict" data-k="verdict" aria-live="polite"></p>
+      </div>
+    </article>
+
+    <article class="system" id="risklab" aria-labelledby="risklab-title">
+      <div class="system-copy">
+        <h3 id="risklab-title">RiskLab</h3>
+        <p class="what">A research lab for one question: which ways of splitting money across assets still hold up when estimates are noisy, markets change mood and trading costs money?</p>
+        <p class="proof">Six methods run through a simulated market with a calm spell, a crash, a recovery and an inflation scare. The crash is brutal on purpose, so every method loses. What matters is which loses least, and whether that difference is real.</p>
+        <p class="limits">Simulated markets, not historical returns or advice.</p>
+        <p class="links"><a href="systems/risklab.html">Case study</a><a href="https://github.com/Krishna-V-Gowda/RiskLab">Source</a></p>
+      </div>
+      <div class="demo" data-demo="risk">
+        <div class="demo-bar"><span>₹1 invested in each method, day by day</span><button type="button" class="replay">Replay</button></div>
+        <svg class="risk" viewBox="0 0 640 300" role="img" aria-label="Wealth of six allocation methods over the simulated period"></svg>
+        <ul class="legend" data-k="legend"></ul>
+      </div>
+    </article>
+
+    <article class="system" id="data301" aria-labelledby="data301-title">
+      <div class="system-copy">
+        <h3 id="data301-title">DATA301 ML Studio</h3>
+        <p class="what">The course platform for machine learning at Vidyashilp University: twelve interactive labs where students change a setting and watch the model respond.</p>
+        <p class="proof">Each lab's maths is a small, separate module with its own tests, so what students see is the algorithm, not the interface around it.</p>
+        <p class="limits">Teaching-scale models in two dimensions.</p>
+        <p class="links"><a href="systems/data301.html">Case study</a><a href="https://data301-ml-studio.vercel.app/">Open the studio</a></p>
+      </div>
+      <div class="demo" data-demo="gd">
+        <div class="demo-bar"><span>Gradient descent fitting a line, like the studio's first lab</span><button type="button" class="replay">Replay</button></div>
+        <canvas class="gd" width="640" height="300" aria-label="A line being fitted to points by gradient descent"></canvas>
+        <dl class="counters">
+          <div><dt>Step</dt><dd data-k="step">0</dd></div>
+          <div><dt>Error</dt><dd data-k="loss">–</dd></div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section id="krivance" class="krivance" aria-labelledby="krivance-title">
+    <div>
+      <h2 id="krivance-title">KRIVANCE</h2>
+      <p>A quantitative research company I co-founded, where I am CTO. Its public research looks at who is positioned where in markets, how overnight interest rates really move, and how trading signals fade once they are published.</p>
+      <p>Its Record is the panel at the top of this page. Each forecast is sealed before the outcome exists, signed, chained to the one before it and timestamped in Bitcoin, then graded in public. Misses are shown, not deleted.</p>
+      <p class="links"><a href="https://krivance.com/">Visit krivance.com</a><a href="https://krivance.com/record">Check the Record</a></p>
+    </div>
+  </section>
+
+  <section id="method" class="about" aria-labelledby="about-title">
+    <div class="about-copy">
+      <h2 id="about-title">How I work</h2>
+      <p>I treat every important claim in software as something that should come with its proof. That means writing down exactly what a number means, building a second implementation to check the first, breaking the system on purpose, and stating the limits next to every result.</p>
+      <p>I'm studying for a B.Tech (Hons.) in Computer Science and Engineering, graduating in 2028, and I'm open to hard engineering and research problems.</p>
+    </div>
+    <div class="contact">
+      <a class="btn btn-solid" href="mailto:kris7090779999@gmail.com">kris7090779999@gmail.com</a>
+      <a class="btn" href="https://github.com/Krishna-V-Gowda">GitHub</a>
+      <a class="btn" href="https://krivance.com/">krivance.com</a>
+    </div>
+    <div class="also">
+      <h3>Also built</h3>
+      <ul>
+        <li><a href="https://github.com/Krishna-V-Gowda/dayflow-hrms">Dayflow</a>, an HR system that shows HR how approving a leave affects team coverage before they decide.</li>
+        <li><a href="systems/apex.html">EDA InsightLab Apex</a>, the data-exploration app TrustBench checks, which runs entirely in your browser.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Krishna V. Gowda, Bengaluru</span>
+  <span>No trackers. The demos use each project's own published data.</span>
+</footer>
+</body>
+</html>
