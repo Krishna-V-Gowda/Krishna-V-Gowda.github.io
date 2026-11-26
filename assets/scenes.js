@@ -552,6 +552,55 @@ function bowlScene(THREE) {
   });
 }
 
+/* ---------- Apex: 120 production runs regrouping into Apex's own PCA view ---------- */
+
+function apexScenes(THREE) {
+  document.querySelectorAll("canvas[data-apex3d]").forEach((canvas) => whenNear(canvas, async () => {
+    const data = await fetch("/assets/data/apex-pca.json").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    if (!data) return;
+    const s = await stage(THREE, canvas, 32);
+    s.camera.position.set(4.4, 3.0, 6.6);
+    s.camera.lookAt(0, -0.1, 0);
+    const n = data.points.length;
+    // The percentages beside the cloud come from the same file it draws, so they can never disagree.
+    const dds = canvas.closest(".demo")?.querySelectorAll(".counters dd");
+    if (dds?.length >= 2) { dds[0].textContent = `${(data.exp[0] * 100).toFixed(1)}%`; dds[1].textContent = `${(data.exp[1] * 100).toFixed(1)}%`; }
+    const reach = (pick) => Math.max(...data.points.flatMap(pick).map(Math.abs)) || 1;
+    const sScale = 1.9 / reach((p) => p.s), pScale = 2.2 / reach((p) => p.p);
+    const lineColor = { A: css("--proof"), B: "#d9a93a", C: css("--ink"), D: "#8f9bab" };
+    const dots = new THREE.InstancedMesh(new THREE.SphereGeometry(0.075, 20, 12), new THREE.MeshPhysicalMaterial({ metalness: 0.2, roughness: 0.3, clearcoat: 0.6 }), n);
+    data.points.forEach((p, i) => dots.setColorAt(i, new THREE.Color(lineColor[p.line] || lineColor.D)));
+    s.scene.add(dots);
+    // Faint cube for the raw measurements, faint plane for the PCA view; each fades in with its phase.
+    const cube = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(3.8, 3.8, 3.8)), new THREE.LineBasicMaterial({ color: css("--muted"), transparent: true, opacity: 0.25 }));
+    const plane = new THREE.GridHelper(4.8, 12, css("--proof"), css("--proof"));
+    plane.material.transparent = true;
+    plane.material.opacity = 0;
+    s.scene.add(cube, plane);
+    const m = new THREE.Matrix4(), v = new THREE.Vector3();
+    const ease = (x) => x * x * (3 - 2 * x);
+    let t0 = null;
+    const button = canvas.closest(".demo")?.querySelector(".replay");
+    if (button) button.addEventListener("click", () => { t0 = null; buzz(8); kick(); });
+    // One cycle: hold the raw view, glide into PCA, hold, glide back.
+    const phase = (u) => (u < 2.5 ? 0 : u < 4.5 ? ease((u - 2.5) / 2) : u < 8 ? 1 : u < 10 ? 1 - ease((u - 8) / 2) : 0);
+    const kick = animate(canvas, s, (t) => {
+      t0 ??= t;
+      const k = reduceMotion ? 1 : phase((t - t0) % 10.5);
+      data.points.forEach((p, i) => {
+        const a = [p.s[0] * sScale, p.s[1] * sScale, p.s[2] * sScale];
+        const b = [p.p[0] * pScale, 0, p.p[1] * pScale];
+        v.set(a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, a[2] + (b[2] - a[2]) * k);
+        dots.setMatrixAt(i, m.makeTranslation(v.x, v.y, v.z));
+      });
+      dots.instanceMatrix.needsUpdate = true;
+      cube.material.opacity = 0.25 * (1 - k);
+      plane.material.opacity = 0.22 * k;
+      s.scene.rotation.y = reduceMotion ? 0.5 : 0.5 + Math.sin(t * 0.2) * 0.35;
+    });
+  }));
+}
+
 /* ---------- Start ---------- */
 
 if (!hasWebGL()) {
@@ -565,6 +614,7 @@ if (!hasWebGL()) {
       ringsScene(THREE);
       ribbonsScene(THREE);
       bowlScene(THREE);
+      apexScenes(THREE);
     })
     .catch(() => document.documentElement.classList.add("no-webgl"));
 }

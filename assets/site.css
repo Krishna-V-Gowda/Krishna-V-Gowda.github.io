@@ -91,7 +91,9 @@ code, .num, .mono { font-family: var(--mono); font-variant-numeric: tabular-nums
 .terrain canvas { height: clamp(180px, 22vw, 260px); }
 .sig { margin: 10px 0 0; }
 .sig canvas { display: block; width: 100%; height: clamp(200px, 24vw, 280px); aspect-ratio: auto; }
-.no-webgl .chain3d, .no-webgl .terrain, .no-webgl .sig { display: none; }
+canvas.apex3d { height: clamp(260px, 30vw, 380px); aspect-ratio: auto; }
+.apex-legend { margin-top: -4px; }
+.no-webgl .chain3d, .no-webgl .terrain, .no-webgl .sig, .no-webgl canvas.apex3d { display: none; }
 
 /* The chain */
 .chain-panel { margin: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 18px; padding: 18px 18px 14px; min-width: 0; }

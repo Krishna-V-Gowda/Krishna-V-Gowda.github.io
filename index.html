@@ -76,7 +76,7 @@
 
   <section id="systems" class="work" aria-labelledby="work-title">
     <div class="section-intro">
-      <h2 id="work-title">Five systems. Each one shows its working.</h2>
+      <h2 id="work-title">Six systems. Each one shows its working.</h2>
       <p>Every panel below runs on the project's real data, taken from its repository. Press replay on any of them.</p>
     </div>
 
@@ -157,6 +157,27 @@
       </div>
     </article>
 
+    <article class="system" id="apex" aria-labelledby="apex-title">
+      <div class="system-copy">
+        <h3 id="apex-title">EDA InsightLab Apex</h3>
+        <p class="what">A data-exploration app that runs entirely in your browser: profiling, cleaning, feature engineering and principal-component analysis, with nothing uploaded anywhere.</p>
+        <p class="proof">This panel runs Apex&rsquo;s own PCA code, from the exact build TrustBench verified, on Apex&rsquo;s sample manufacturing data. An independent reference library gets the same answer to four decimal places.</p>
+        <p class="limits">Exploratory analysis, not model validation.</p>
+        <p class="links"><a href="systems/apex.html">Case study</a><a href="https://krishna-v-gowda.github.io/EDA-InsightLab-Apex/">Open Apex</a><a href="https://github.com/Krishna-V-Gowda/EDA-InsightLab-Apex">Source</a></p>
+      </div>
+      <div class="demo" data-demo="apexpca">
+        <div class="demo-bar"><span>Apex&rsquo;s PCA on 120 production runs</span><button type="button" class="replay">Replay</button></div>
+        <canvas class="apex3d" data-apex3d aria-label="120 production runs moving from three raw measurements into Apex's principal-component view"></canvas>
+        <dl class="counters">
+          <div><dt>First component</dt><dd>31.3%</dd></div>
+          <div><dt>Second component</dt><dd>18.8%</dd></div>
+          <div><dt>Reference library</dt><dd>Agrees</dd></div>
+        </dl>
+        <ul class="legend apex-legend"><li><i style="background:var(--proof)"></i>Line A</li><li><i style="background:#d9a93a"></i>Line B</li><li><i style="background:var(--ink)"></i>Line C</li><li><i style="background:#8f9bab"></i>Line D</li></ul>
+        <p class="fine">Each dot is one production run. It starts at three of its raw measurements (temperature, pressure and line speed), then moves to where Apex&rsquo;s PCA places it using all seven. The percentages are the share of the variation each component captures.</p>
+      </div>
+    </article>
+
     <article class="system" id="risklab" aria-labelledby="risklab-title">
       <div class="system-copy">
         <h3 id="risklab-title">RiskLab</h3>
@@ -223,7 +244,6 @@
       <h3>Also built</h3>
       <ul>
         <li><a href="https://github.com/Krishna-V-Gowda/dayflow-hrms">Dayflow</a>, an HR system that shows HR how approving a leave affects team coverage before they decide.</li>
-        <li><a href="systems/apex.html">EDA InsightLab Apex</a>, the data-exploration app TrustBench checks, which runs entirely in your browser.</li>
       </ul>
     </div>
   </section>
